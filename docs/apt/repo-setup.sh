@@ -1,11 +1,11 @@
 #!/bin/bash
 # Repository setup script for users
 
-REPO_URL="https://akarasulu.github.io/gh-repos/apt"
-KEY_DEST="/etc/apt/trusted.gpg.d/gh-repos.asc"
-LIST_DEST="/etc/apt/sources.list.d/gh-repos.list"
+REPO_URL="https://akarasulu.github.io/zfs-helper/apt"
+KEY_DEST="/etc/apt/trusted.gpg.d/zfs-helper.asc"
+LIST_DEST="/etc/apt/sources.list.d/zfs-helper.list"
 
-echo "🔧 Adding GH-Repos APT repository..."
+echo "🔧 Adding Zfs Helper APT repository..."
 
 # Check if we're on a system that supports the modern method
 if [[ -d "/etc/apt/trusted.gpg.d" ]]; then

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GH-Repos APT Repository</title>
+    <title>Zfs Helper APT Repository</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; }
         .container { max-width: 800px; margin: 0 auto; }
@@ -11,16 +11,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>GH-Repos APT Repository</h1>
-        <p>This is an APT repository hosted on GitHub Pages for <strong>GH-Repos</strong>.</p>
+        <h1>Zfs Helper APT Repository</h1>
+        <p>This is an APT repository hosted on GitHub Pages for <strong>Zfs Helper</strong>.</p>
         
         <h2>Quick Setup</h2>
         <pre><code># Download and run setup script
-curl -fsSL https://akarasulu.github.io/gh-repos/apt/repo-setup.sh | bash
+curl -fsSL https://akarasulu.github.io/zfs-helper/apt/repo-setup.sh | bash
 
 # Or manual setup:
-curl -fsSL https://akarasulu.github.io/gh-repos/apt/apt-repo-pubkey.asc | sudo tee /etc/apt/trusted.gpg.d/gh-repos.asc > /dev/null
-echo "deb https://akarasulu.github.io/gh-repos/apt stable main" | sudo tee /etc/apt/sources.list.d/gh-repos.list
+curl -fsSL https://akarasulu.github.io/zfs-helper/apt/apt-repo-pubkey.asc | sudo tee /etc/apt/trusted.gpg.d/zfs-helper.asc > /dev/null
+echo "deb https://akarasulu.github.io/zfs-helper/apt stable main" | sudo tee /etc/apt/sources.list.d/zfs-helper.list
 sudo apt update</code></pre>
 
         <h2>Available Packages</h2>

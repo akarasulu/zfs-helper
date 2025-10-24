@@ -1,11 +1,11 @@
 docs_dir: mkdocs
 site_dir: docs
-site_name: GH-Repos
+site_name: "Zfs Helper"
 site_description: GitHub Pages as APT repositories with automated package management
 site_author: Alex O. Karasulu
 copyright: Copyright &copy; 2025 Alex O. Karasulu
-repo_url: https://github.com/akarasulu/gh-repos
-repo_name: gh-repos
+repo_url: https://github.com/akarasulu/zfs-helper
+repo_name: zfs-helper
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
@@ -76,10 +76,10 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/akarasulu/gh-repos
+      link: https://github.com/akarasulu/zfs-helper
       name: Source Code
     - icon: fontawesome/solid/book
-      link: https://akarasulu.github.io/gh-repos/
+      link: https://akarasulu.github.io/zfs-helper/
       name: Documentation
   version:
     provider: mike
