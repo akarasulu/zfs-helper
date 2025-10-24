@@ -6,17 +6,15 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="GitHub Pages as APT repositories with automated package management">
-      
-      
-        <meta name="author" content="Alex O. Karasulu">
+        <meta name="description" content="Secure ZFS delegation helper for unprivileged services">
       
       
       
-        <link rel="prev" href="../customize/">
+      
+        <link rel="prev" href="../policy/">
       
       
-        <link rel="next" href="../build/">
+        <link rel="next" href="../testing/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -24,7 +22,7 @@
     
     
       
-        <title>Design & Architecture - Zfs Helper</title>
+        <title>Architecture & Design - ZFS Helper</title>
       
     
     
@@ -62,8 +60,6 @@
   
     
     
-      
-    
     
     
     
@@ -76,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#architecture-notes" class="md-skip">
+        <a href="#architecture-design" class="md-skip">
           Skip to content
         </a>
       
@@ -85,16 +81,12 @@
       
     </div>
     
-      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
-        
-      </div>
-    
     
       
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Zfs Helper" class="md-header__button md-logo" aria-label="Zfs Helper" data-md-component="logo">
+    <a href=".." title="ZFS Helper" class="md-header__button md-logo" aria-label="ZFS Helper" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -108,13 +100,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Zfs Helper
+            ZFS Helper
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Design & Architecture
+              Architecture & Design
             
           </span>
         </div>
@@ -122,33 +114,7 @@
     </div>
     
       
-        <form class="md-header__option" data-md-component="palette">
-  
     
-    
-    
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
-    
-      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
-      </label>
-    
-  
-    
-    
-    
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
-    
-      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
-      </label>
-    
-  
-</form>
-      
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -182,8 +148,6 @@
         </button>
       </nav>
       
-        <div class="md-search__suggest" data-md-component="search-suggest"></div>
-      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
@@ -204,7 +168,7 @@
         <a href="https://github.com/akarasulu/zfs-helper" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
     zfs-helper
@@ -257,7 +221,7 @@
   
     
   
-  Quickstart
+  Quick Start
 
       </a>
     </li>
@@ -269,20 +233,55 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../usage/" class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../installation/" class="md-tabs__link">
+        
   
   
     
   
-  User Guide
+  Installation
 
-        </a>
-      </li>
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../usage/" class="md-tabs__link">
+        
+  
+  
     
+  
+  Usage Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../policy/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Policy Configuration
+
+      </a>
+    </li>
   
 
       
@@ -293,20 +292,17 @@
     
   
   
-    
-    
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
-          
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
   
   
     
   
-  Developer Guide
+  Architecture & Design
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -315,20 +311,36 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../releases/" class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../testing/" class="md-tabs__link">
+        
   
   
     
   
-  Project
+  Testing Framework
 
-        </a>
-      </li>
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../release/" class="md-tabs__link">
+        
+  
+  
     
+  
+  Release Process
+
+      </a>
+    </li>
   
 
       
@@ -354,20 +366,20 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Zfs Helper" class="md-nav__button md-logo" aria-label="Zfs Helper" data-md-component="logo">
+    <a href=".." title="ZFS Helper" class="md-nav__button md-logo" aria-label="ZFS Helper" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Zfs Helper
+    ZFS Helper
   </label>
   
     <div class="md-nav__source">
       <a href="https://github.com/akarasulu/zfs-helper" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
     zfs-helper
@@ -411,7 +423,7 @@
   
   
   <span class="md-ellipsis">
-    Quickstart
+    Quick Start
     
   </span>
   
@@ -427,53 +439,24 @@
   
   
   
-    
-    
-      
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
         
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-            
   
   
   <span class="md-ellipsis">
-    User Guide
+    Installation
     
   </span>
   
 
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            User Guide
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
+      </a>
+    </li>
+  
+
+    
+      
+      
   
   
   
@@ -484,7 +467,7 @@
   
   
   <span class="md-ellipsis">
-    Getting Started
+    Usage Guide
     
   </span>
   
@@ -493,21 +476,20 @@
     </li>
   
 
-              
-            
-              
-                
+    
+      
+      
   
   
   
   
     <li class="md-nav__item">
-      <a href="../customize/" class="md-nav__link">
+      <a href="../policy/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Customization
+    Policy Configuration
     
   </span>
   
@@ -516,71 +498,9 @@
     </li>
   
 
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
     
       
       
-  
-  
-    
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    Developer Guide
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            Developer Guide
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
   
   
     
@@ -600,7 +520,7 @@
   
   
   <span class="md-ellipsis">
-    Design & Architecture
+    Architecture & Design
     
   </span>
   
@@ -613,7 +533,7 @@
   
   
   <span class="md-ellipsis">
-    Design & Architecture
+    Architecture & Design
     
   </span>
   
@@ -636,29 +556,620 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#system-diagram" class="md-nav__link">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
-      System Diagram
+      Summary
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-decisions" class="md-nav__link">
+  <a href="#high-level-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Key Decisions
+      High-Level Architecture
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#future-work" class="md-nav__link">
+  <a href="#system-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Future Work
+      System Overview
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request Lifecycle
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-client-tool-zfs-helperctl" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Client Tool (zfs-helperctl)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-privileged-daemon-zfs-helperpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Privileged Daemon (zfs-helper.py)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detailed Behavior
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detailed Behavior">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#socket-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Socket Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credential-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Credential Verification
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-membership" class="md-nav__link">
+    <span class="md-ellipsis">
+      Group Membership
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-user-dataset-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per-User Dataset Checks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-lookup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Lookup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-dispatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Action Dispatch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Execution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ownership-harmonization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ownership Harmonization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supported Actions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-files-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Files Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Files Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service Authorization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataset Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Property Constraints
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-layer-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Layer Authorization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trust-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trust Boundaries
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#privilege-escalation-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      Privilege Escalation Prevention
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Flow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request Processing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-request-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Request Flow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-side-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Client-Side Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-side-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server-Side Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging Strategy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#socket-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Socket Activation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zfs-command-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      ZFS Command Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scalability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#concurrent-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concurrent Requests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-user-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-User Support
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delegation-sync-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Delegation Sync Script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failure Handling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Failure Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#policy-and-validation-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy and Validation Failures
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Runtime Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connection-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connection Handling
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#systemd-socket-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Systemd Socket Activation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-socket-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Socket Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-hot-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Hot-Loading
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#socket-activation_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Socket Activation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-caching_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zfs-command-optimization_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ZFS Command Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scalability_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scalability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#concurrent-requests_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concurrent Requests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-user-support_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-User Support
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-architecture-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Architecture Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Architecture Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#potential-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Potential Enhancements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backwards-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backwards Compatibility
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -669,21 +1180,20 @@
     </li>
   
 
-              
-            
-              
-                
+    
+      
+      
   
   
   
   
     <li class="md-nav__item">
-      <a href="../build/" class="md-nav__link">
+      <a href="../testing/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Build Process
+    Testing Framework
     
   </span>
   
@@ -692,90 +1202,25 @@
     </li>
   
 
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
     
       
       
-  
-  
-  
-  
-    
-    
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Project
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
-            Project
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
   
   
   
   
     <li class="md-nav__item">
-      <a href="../releases/" class="md-nav__link">
+      <a href="../release/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Releases
+    Release Process
     
   </span>
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -807,29 +1252,620 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#system-diagram" class="md-nav__link">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
-      System Diagram
+      Summary
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-decisions" class="md-nav__link">
+  <a href="#high-level-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Key Decisions
+      High-Level Architecture
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#future-work" class="md-nav__link">
+  <a href="#system-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Future Work
+      System Overview
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request Lifecycle
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-client-tool-zfs-helperctl" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Client Tool (zfs-helperctl)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-privileged-daemon-zfs-helperpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Privileged Daemon (zfs-helper.py)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detailed Behavior
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detailed Behavior">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#socket-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Socket Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#credential-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Credential Verification
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-membership" class="md-nav__link">
+    <span class="md-ellipsis">
+      Group Membership
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-user-dataset-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per-User Dataset Checks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-lookup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Lookup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-dispatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Action Dispatch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command Execution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ownership-harmonization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ownership Harmonization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supported Actions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-files-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Files Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Files Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service Authorization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataset Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Property Constraints
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-layer-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Layer Authorization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trust-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trust Boundaries
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#privilege-escalation-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      Privilege Escalation Prevention
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Flow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request Processing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-request-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Request Flow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-side-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Client-Side Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-side-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server-Side Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging Strategy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#socket-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Socket Activation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zfs-command-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      ZFS Command Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scalability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#concurrent-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concurrent Requests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-user-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-User Support
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delegation-sync-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Delegation Sync Script
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failure Handling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Failure Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#policy-and-validation-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy and Validation Failures
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Runtime Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connection-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connection Handling
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#systemd-socket-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Systemd Socket Activation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-socket-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual Socket Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-hot-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Hot-Loading
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#socket-activation_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Socket Activation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-caching_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zfs-command-optimization_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ZFS Command Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scalability_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scalability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#concurrent-requests_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concurrent Requests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-user-support_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-User Support
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-architecture-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Architecture Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Architecture Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#potential-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Potential Enhancements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backwards-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backwards Compatibility
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -852,26 +1888,370 @@
   
 
 
-<h1 id="architecture-notes">Architecture Notes<a class="headerlink" href="#architecture-notes" title="Permanent link">&para;</a></h1>
-<p>Capture the decisions and trade-offs that define this project.</p>
-<h2 id="system-diagram">System Diagram<a class="headerlink" href="#system-diagram" title="Permanent link">&para;</a></h2>
+<h1 id="architecture-design">Architecture &amp; Design<a class="headerlink" href="#architecture-design" title="Permanent link">&para;</a></h1>
+<p>ZFS Helper implements a secure privilege delegation architecture that bridges the gap between unprivileged user services and privileged ZFS operations.</p>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p><code>zfs-helper</code> is a privileged UNIX-domain socket daemon that executes a constrained set of <code>zfs(8)</code> operations on behalf of unprivileged systemd user services. Access is governed by per-user policy files stored under <code>/etc/zfs-helper/policy.d/&lt;user&gt;/</code>, allowing fine-grained control over datasets, snapshots, and property mutations. Requests are expressed as single-line JSON payloads; responses echo a JSON object containing a status code and informational string.</p>
+<h2 id="high-level-architecture">High-Level Architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TD
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    A[&quot;User Service&lt;br/&gt;(unit@UID.service)&quot;] --&gt;|JSON over Unix socket| B[&quot;zfs-helper daemon&quot;]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    B --&gt; C[&quot;Policy Loader&lt;br/&gt;(/etc/zfs-helper/policy.d)&quot;]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    B --&gt; D[&quot;Action Dispatchers&lt;br/&gt;handle_* handlers&quot;]
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    D --&gt;|Subprocess| E[&quot;zfs(8)&quot;]
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    E --&gt; D
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    D --&gt;|Status + info| A
+</code></pre></div>
+<h2 id="system-overview">System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│                    User Space (Unprivileged)                    │
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├─────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│  ┌─────────────────┐    ┌──────────────────────────────────────┐ │
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│  │ User Services   │    │ User Applications                    │ │
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│  │ - backup@.srv   │    │ - Container engines                  │ │
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│  │ - container@.srv│    │ - Backup scripts                     │ │
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│  │ - dev-env.srv   │    │ - Development tools                  │ │
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│  └─────────────────┘    └──────────────────────────────────────┘ │
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│           │                               │                      │
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│           └───────────────┬───────────────┘                      │
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│                           │                                      │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│                  ┌────────▼────────┐                             │
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│                  │ zfs-helperctl   │                             │
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│                  │ (Client Tool)   │                             │
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│                  └────────┬────────┘                             │
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>├───────────────────────────┼─────────────────────────────────────┤
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│                           │                                      │
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│              ┌────────────▼────────────┐                         │
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│              │    UNIX Socket          │                         │
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│              │ /run/zfs-helper.sock    │                         │
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│              │   (root:zfshelper)      │                         │
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│              └────────────┬────────────┘                         │
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>├───────────────────────────┼─────────────────────────────────────┤
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>│                    Root Space (Privileged)                      │
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>├───────────────────────────┼─────────────────────────────────────┤
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>│              ┌────────────▼────────────┐                         │
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>│              │   zfs-helper.py         │                         │
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>│              │   (Daemon)              │                         │
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>│              │                         │                         │
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>│              │ ┌─────────────────────┐ │                         │
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>│              │ │ Policy Engine       │ │                         │
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>│              │ │ - User validation   │ │                         │
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>│              │ │ - Service validation│ │                         │
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>│              │ │ - Dataset validation│ │                         │
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>│              │ └─────────────────────┘ │                         │
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>│              │                         │                         │
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>│              │ ┌─────────────────────┐ │                         │
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>│              │ │ ZFS Interface       │ │                         │
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>│              │ │ - Command execution │ │                         │
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>│              │ │ - Error handling    │ │                         │
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>│              │ │ - Ownership mgmt    │ │                         │
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>│              │ └─────────────────────┘ │                         │
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>│              └────────────┬────────────┘                         │
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>│                           │                                      │
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>│                  ┌────────▼────────┐                             │
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>│                  │   ZFS Kernel    │                             │
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>│                  │   Module        │                             │
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>│                  └─────────────────┘                             │
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>└─────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h2 id="request-lifecycle">Request Lifecycle<a class="headerlink" href="#request-lifecycle" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sequenceDiagram
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    participant Service as User Service
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    participant Socket as /run/zfs-helper.sock
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    participant Helper as zfs-helper
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    participant ZFS as /usr/sbin/zfs
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    Service-&gt;&gt;Socket: connect()
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    Service-&gt;&gt;Helper: send JSON payload
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    Helper-&gt;&gt;Helper: read_peer_ucred()
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    Helper-&gt;&gt;Helper: validate_request()
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    Helper-&gt;&gt;Helper: load_policy()
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    Helper-&gt;&gt;Helper: handle_action()
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    Helper-&gt;&gt;ZFS: subprocess.run([zfs, ...])
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    ZFS--&gt;&gt;Helper: stdout/stderr + return code
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    Helper--&gt;&gt;Service: JSON status response
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    Service-&gt;&gt;Socket: close()
+</code></pre></div>
+<h2 id="core-components">Core Components<a class="headerlink" href="#core-components" title="Permanent link">&para;</a></h2>
+<h3 id="1-client-tool-zfs-helperctl">1. Client Tool (<code>zfs-helperctl</code>)<a class="headerlink" href="#1-client-tool-zfs-helperctl" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose</strong>: User-space interface for requesting ZFS operations
+<strong>Language</strong>: Bash script
+<strong>Location</strong>: <code>/usr/bin/zfs-helperctl</code></p>
+<p><strong>Responsibilities</strong>:
+- Command-line argument parsing and validation
+- JSON payload construction
+- UNIX socket communication with daemon
+- Error reporting and status codes</p>
+<p><strong>Security Features</strong>:
+- No privileged operations
+- Input validation and sanitization
+- Secure socket communication</p>
+<h3 id="2-privileged-daemon-zfs-helperpy">2. Privileged Daemon (<code>zfs-helper.py</code>)<a class="headerlink" href="#2-privileged-daemon-zfs-helperpy" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose</strong>: Privileged service that executes authorized ZFS operations
+<strong>Language</strong>: Python 3
+<strong>Location</strong>: <code>/usr/sbin/zfs-helper.py</code></p>
+<p><strong>Architecture</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="err">┌─────────────────────────────────────────────────────────────┐</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="err">│</span>                    <span class="n">zfs</span><span class="o">-</span><span class="n">helper</span><span class="o">.</span><span class="n">py</span>                            <span class="err">│</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="err">├─────────────────────────────────────────────────────────────┤</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="err">│</span> <span class="err">┌─────────────────┐</span>  <span class="err">┌─────────────────┐</span>  <span class="err">┌───────────────┐</span> <span class="err">│</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="err">│</span> <span class="err">│</span> <span class="n">Socket</span> <span class="n">Handler</span>  <span class="err">│</span>  <span class="err">│</span> <span class="n">Auth</span> <span class="n">Engine</span>     <span class="err">│</span>  <span class="err">│</span> <span class="n">ZFS</span> <span class="n">Executor</span>  <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Accept</span> <span class="n">conns</span>  <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">SO_PEERCRED</span>   <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Command</span> <span class="n">run</span> <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Parse</span> <span class="n">JSON</span>    <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Cgroup</span> <span class="n">check</span>  <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Output</span> <span class="n">parse</span><span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Validate</span> <span class="n">msgs</span> <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Policy</span> <span class="n">lookup</span> <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Error</span> <span class="n">handle</span><span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="err">│</span> <span class="err">└─────────────────┘</span>  <span class="err">└─────────────────┘</span>  <span class="err">└───────────────┘</span> <span class="err">│</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="err">│</span>          <span class="err">│</span>                     <span class="err">│</span>                    <span class="err">│</span>       <span class="err">│</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="err">│</span>          <span class="err">└─────────┬───────────┼────────────────────┘</span>       <span class="err">│</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="err">│</span>                    <span class="err">│</span>           <span class="err">│</span>                            <span class="err">│</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="err">│</span> <span class="err">┌─────────────────────────────────────────────────────────┐</span> <span class="err">│</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="err">│</span> <span class="err">│</span>              <span class="n">Logging</span> <span class="o">&amp;</span> <span class="n">Audit</span> <span class="n">Engine</span>                     <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Structured</span> <span class="n">JSON</span> <span class="n">logs</span>                                  <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">ALLOW</span><span class="o">/</span><span class="n">DENY</span><span class="o">/</span><span class="n">ERROR</span> <span class="n">decisions</span>                            <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Performance</span> <span class="n">metrics</span>                                   <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="err">│</span> <span class="err">└─────────────────────────────────────────────────────────┘</span> <span class="err">│</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="err">└─────────────────────────────────────────────────────────────┘</span>
+</code></pre></div></p>
+<h2 id="detailed-behavior">Detailed Behavior<a class="headerlink" href="#detailed-behavior" title="Permanent link">&para;</a></h2>
+<h3 id="socket-management">Socket Management<a class="headerlink" href="#socket-management" title="Permanent link">&para;</a></h3>
+<p>The daemon prefers a systemd-provided socket via <code>LISTEN_FDS</code>; otherwise it binds <code>/run/zfs-helper.sock</code>, enforces <code>0660</code> permissions, and attempts to chown the path to the <code>zfshelper</code> group.</p>
+<h3 id="credential-verification">Credential Verification<a class="headerlink" href="#credential-verification" title="Permanent link">&para;</a></h3>
+<p><code>SO_PEERCRED</code> supplies <code>(pid, uid, gid)</code>. The peer must belong to a systemd user service (<code>user@UID.service/app.slice/…</code>) that matches at least one glob in <code>units.list</code>.</p>
+<h3 id="group-membership">Group Membership<a class="headerlink" href="#group-membership" title="Permanent link">&para;</a></h3>
+<p>Callers must be members of the <code>zfshelper</code> POSIX group; non-members receive <code>DENY_GROUP</code>.</p>
+<h3 id="per-user-dataset-checks">Per-User Dataset Checks<a class="headerlink" href="#per-user-dataset-checks" title="Permanent link">&para;</a></h3>
+<p>Every dataset-policy line binds a dataset glob to an authorized username; requests from other users are denied even if the glob matches.</p>
+<h3 id="policy-lookup">Policy Lookup<a class="headerlink" href="#policy-lookup" title="Permanent link">&para;</a></h3>
+<p>Policy files are optional, newline-delimited allow-lists. Empty or missing files imply denial except when fallbacks exist (e.g., <code>unmount</code> falls back to <code>mount</code> allow-list).</p>
+<h3 id="request-validation">Request Validation<a class="headerlink" href="#request-validation" title="Permanent link">&para;</a></h3>
+<p>Payloads must be JSON with an <code>action</code> field. Root callers are rejected. Maximum payload size is capped at 8 KiB.</p>
+<h3 id="action-dispatch">Action Dispatch<a class="headerlink" href="#action-dispatch" title="Permanent link">&para;</a></h3>
+<p>Supported actions map to dedicated handlers (<code>handle_mount</code>, <code>handle_snapshot</code>, etc.) that validate arguments using regexes, check policy globs, then invoke <code>zfs_ok</code>.</p>
+<h3 id="command-execution">Command Execution<a class="headerlink" href="#command-execution" title="Permanent link">&para;</a></h3>
+<p><code>zfs_ok</code> wraps <code>subprocess.run</code>, collecting stdout/stderr. Results are normalized into <code>(status, info)</code> pairs where success yields <code>"OK"</code> and failures translate into <code>"ERROR"</code> or <code>"DENY_*"</code> codes.</p>
+<h3 id="ownership-harmonization">Ownership Harmonization<a class="headerlink" href="#ownership-harmonization" title="Permanent link">&para;</a></h3>
+<p>Successful dataset creates and renames trigger a recursive chown of the dataset tree to the caller's UID and primary GID. Snapshot creates chown the corresponding <code>.zfs/snapshot/&lt;name&gt;</code> directories (recursively when <code>-r</code> is used).</p>
+<h3 id="logging">Logging<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h3>
+<p>All decisions flow through <code>log()</code>, emitting single-line structured records tagged by <code>LOG_TAG</code>.</p>
+<h2 id="supported-actions">Supported Actions<a class="headerlink" href="#supported-actions" title="Permanent link">&para;</a></h2>
+<p>Each handler sanitizes input using strict regexes (<code>DATASET_RE</code>, <code>SNAP_RE</code>) before deferring to <code>zfs(8)</code>:</p>
 <ul>
-<li>Replace this section with an updated diagram or textual description.</li>
-<li>Call out core components, data flows, and external dependencies.</li>
+<li><strong><code>mount</code>, <code>unmount</code>, <code>share</code></strong> - Dataset mounting and sharing operations</li>
+<li><strong><code>snapshot</code>, <code>rollback</code>, <code>destroy</code></strong> - Snapshot lifecycle management</li>
+<li><strong><code>create</code>, <code>rename</code></strong> - Dataset creation and renaming</li>
+<li><strong><code>setprop</code></strong> - Property setting (restricted to <code>mountpoint</code>, <code>canmount</code>, <code>sharenfs</code>)</li>
 </ul>
-<h2 id="key-decisions">Key Decisions<a class="headerlink" href="#key-decisions" title="Permanent link">&para;</a></h2>
+<h2 id="policy-files-structure">Policy Files Structure<a class="headerlink" href="#policy-files-structure" title="Permanent link">&para;</a></h2>
+<p>Policy files control access at multiple levels:</p>
+<h3 id="service-authorization">Service Authorization<a class="headerlink" href="#service-authorization" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Summarize major design choices and why they exist.</li>
-<li>Link to ADRs or supporting documents if available.</li>
+<li><strong><code>units.list</code></strong>: Allowed systemd unit globs</li>
 </ul>
-<h2 id="future-work">Future Work<a class="headerlink" href="#future-work" title="Permanent link">&para;</a></h2>
+<h3 id="dataset-operations">Dataset Operations<a class="headerlink" href="#dataset-operations" title="Permanent link">&para;</a></h3>
+<p>Per-operation files with <code>&lt;user&gt; &lt;dataset-glob&gt;</code> entries:
+- <strong><code>mount.list</code>, <code>unmount.list</code></strong>: Mount/unmount permissions
+- <strong><code>snapshot.list</code>, <code>rollback.list</code></strong>: Snapshot operations
+- <strong><code>create.list</code>, <code>destroy.list</code></strong>: Dataset lifecycle
+- <strong><code>share.list</code></strong>: Dataset sharing
+- <strong><code>rename.from.list</code>, <code>rename.to.list</code></strong>: Rename sources and destinations
+- <strong><code>setprop.list</code></strong>: Property modification targets</p>
+<h3 id="property-constraints">Property Constraints<a class="headerlink" href="#property-constraints" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Outline upcoming changes that might alter the architecture.</li>
-<li>Flag areas that need special attention during reviews.</li>
+<li><strong><code>setprop.values.list</code></strong>: Property key/value or mountpoint glob rules (<code>key=value</code> or <code>key:glob</code>)</li>
 </ul>
-<blockquote>
-<p>🧭 Keep the content high level—implementation details belong in code or specs.</p>
-</blockquote>
+<p><strong>Notes</strong>:
+- Wildcard username <code>*</code> grants access to any <code>zfshelper</code> group member
+- Dataset globs use gitignore-style matching: <code>*</code> within segments, <code>**</code> across segments, <code>?</code> for single characters
+- Blank <code>setprop.values.list</code> falls back to builtin safety checks</p>
+<h2 id="security-architecture">Security Architecture<a class="headerlink" href="#security-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="multi-layer-authorization">Multi-Layer Authorization<a class="headerlink" href="#multi-layer-authorization" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Network Layer</strong>: UNIX socket with group ownership</li>
+<li><strong>Kernel Layer</strong>: SO_PEERCRED for authentic PID/UID/GID</li>
+<li><strong>Process Layer</strong>: Systemd user service validation via cgroups</li>
+<li><strong>Application Layer</strong>: Policy-based authorization</li>
+<li><strong>Audit Layer</strong>: Comprehensive logging of all decisions</li>
+</ol>
+<h3 id="trust-boundaries">Trust Boundaries<a class="headerlink" href="#trust-boundaries" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>┌─────────────────┐    Trust    ┌─────────────────┐
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>│   User Space    │─ Boundary ─│   Root Space    │
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│                 │      ↓      │                 │
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│ - User services │     UNIX    │ - zfs-helper    │
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│ - zfs-helperctl │    Socket   │ - Policy files  │
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>│ - Client tools  │             │ - ZFS commands  │
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>└─────────────────┘             └─────────────────┘
+</code></pre></div>
+<p><strong>Trust Model</strong>:
+- User space is <strong>untrusted</strong>
+- Socket provides <strong>authenticated communication</strong>
+- Root space validates <strong>all requests</strong>
+- Policy files define <strong>authorized operations</strong>
+- ZFS kernel module is <strong>final arbiter</strong></p>
+<h3 id="privilege-escalation-prevention">Privilege Escalation Prevention<a class="headerlink" href="#privilege-escalation-prevention" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Minimal Capabilities</strong>: Only <code>CAP_SYS_ADMIN</code> and <code>CAP_DAC_READ_SEARCH</code></li>
+<li><strong>Syscall Filtering</strong>: Restricted to essential syscalls only</li>
+<li><strong>Filesystem Protection</strong>: Most of filesystem is read-only</li>
+<li><strong>Process Isolation</strong>: Private /tmp, /dev restrictions</li>
+<li><strong>No New Privileges</strong>: Prevents privilege escalation</li>
+</ol>
+<h2 id="data-flow">Data Flow<a class="headerlink" href="#data-flow" title="Permanent link">&para;</a></h2>
+<h3 id="request-processing">Request Processing<a class="headerlink" href="#request-processing" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>┌─────────────┐    JSON     ┌─────────────┐    Validation    ┌─────────────┐
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>│zfs-helperctl│────────────▶│zfs-helper.py│─────────────────▶│Policy Engine│
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>└─────────────┘             └─────────────┘                  └─────────────┘
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                                    │                               │
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                            ┌───────▼──────┐               ┌───────▼──────┐
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                            │   ZFS CMD    │               │    ALLOW/    │
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                            │  Execution   │◀──────────────│     DENY     │
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                            └───────┬──────┘               └──────────────┘
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                                    │
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>                            ┌───────▼──────┐
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>                            │   Response   │
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>                            │  &amp; Logging   │
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>                            └──────────────┘
+</code></pre></div>
+<h3 id="example-request-flow">Example Request Flow<a class="headerlink" href="#example-request-flow" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>User Service</strong>: <code>systemctl --user start backup@pre-upgrade</code></li>
+<li><strong>Client Call</strong>: <code>zfs-helperctl snapshot tank/home/alice@pre-upgrade</code></li>
+<li><strong>JSON Message</strong>: <code>{"action":"snapshot","target":"tank/home/alice@pre-upgrade"}</code></li>
+<li><strong>Daemon Receives</strong>: Extracts PID/UID/GID via SO_PEERCRED</li>
+<li><strong>Authorization</strong>: Checks cgroups, group membership, policy files</li>
+<li><strong>Execution</strong>: <code>/usr/sbin/zfs snapshot tank/home/alice@pre-upgrade</code></li>
+<li><strong>Response</strong>: Success/failure back to client</li>
+<li><strong>Logging</strong>: Structured audit log with decision rationale</li>
+</ol>
+<h2 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
+<h3 id="client-side-errors">Client-Side Errors<a class="headerlink" href="#client-side-errors" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Usage errors</strong>: Invalid arguments, missing parameters</li>
+<li><strong>Connection errors</strong>: Socket unavailable, permission denied</li>
+<li><strong>Communication errors</strong>: Malformed responses, timeouts</li>
+</ul>
+<h3 id="server-side-errors">Server-Side Errors<a class="headerlink" href="#server-side-errors" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Authentication errors</strong>: Invalid credentials, group membership</li>
+<li><strong>Authorization errors</strong>: Policy violations, unauthorized operations</li>
+<li><strong>Execution errors</strong>: ZFS command failures, system errors</li>
+</ul>
+<h3 id="logging-strategy">Logging Strategy<a class="headerlink" href="#logging-strategy" title="Permanent link">&para;</a></h3>
+<p>All errors are logged with structured JSON containing:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-10-24T12:00:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">&quot;caller_uid&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">&quot;caller_pid&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">&quot;service_unit&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;backup@pre-upgrade.service&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;snapshot&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tank/home/alice@pre-upgrade&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="nt">&quot;decision&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DENY&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dataset not in snapshot.list&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">  </span><span class="nt">&quot;policy_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/etc/zfs-helper/policy.d/alice/snapshot.list&quot;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="p">}</span>
+</code></pre></div></p>
+<h2 id="performance-considerations">Performance Considerations<a class="headerlink" href="#performance-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="socket-activation">Socket Activation<a class="headerlink" href="#socket-activation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Lazy Loading</strong>: Daemon starts only when needed</li>
+<li><strong>Resource Efficiency</strong>: No continuous background process</li>
+<li><strong>Fast Startup</strong>: Minimal initialization overhead</li>
+</ul>
+<h3 id="policy-caching">Policy Caching<a class="headerlink" href="#policy-caching" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File Watching</strong>: Reload policies on file changes</li>
+<li><strong>Memory Caching</strong>: Keep parsed policies in memory</li>
+<li><strong>Glob Compilation</strong>: Pre-compile patterns for performance</li>
+</ul>
+<h3 id="zfs-command-optimization">ZFS Command Optimization<a class="headerlink" href="#zfs-command-optimization" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Direct Execution</strong>: No shell interpretation overhead</li>
+<li><strong>Minimal Parsing</strong>: Extract only necessary output</li>
+<li><strong>Error Propagation</strong>: Preserve exit codes and messages</li>
+</ul>
+<h2 id="scalability">Scalability<a class="headerlink" href="#scalability" title="Permanent link">&para;</a></h2>
+<h3 id="concurrent-requests">Concurrent Requests<a class="headerlink" href="#concurrent-requests" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Single-threaded</strong>: Prevents race conditions</li>
+<li><strong>Request Queuing</strong>: Socket backlog handles bursts</li>
+<li><strong>Fast Processing</strong>: Sub-millisecond policy decisions</li>
+</ul>
+<h3 id="multi-user-support">Multi-User Support<a class="headerlink" href="#multi-user-support" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Per-User Policies</strong>: Isolated configuration</li>
+<li><strong>Shared Infrastructure</strong>: Single daemon serves all users</li>
+<li><strong>Efficient Lookup</strong>: O(1) policy file access</li>
+</ul>
+<h2 id="delegation-sync-script">Delegation Sync Script<a class="headerlink" href="#delegation-sync-script" title="Permanent link">&para;</a></h2>
+<p><code>/usr/sbin/apply-delegation.py</code> ingests the policy tree and issues <code>zfs allow</code>/<code>unallow</code> calls so OpenZFS delegation matches the helper's view of who may run which operations.</p>
+<p><strong>Managed permissions include</strong>:
+- <code>mount</code>, <code>snapshot</code>, <code>rollback</code>, <code>create</code>, <code>destroy</code>, <code>rename</code>, <code>share</code> (where supported)
+- Property grants (<code>property=mountpoint</code>, <code>property=canmount</code>, <code>property=sharenfs</code>)</p>
+<p><strong>Usage</strong>:
+- Invoke with <code>--dry-run</code> to preview changes
+- Run without flags for enforcement
+- Commands that OpenZFS refuses to delegate log warnings but do not abort</p>
+<h2 id="failure-handling">Failure Handling<a class="headerlink" href="#failure-handling" title="Permanent link">&para;</a></h2>
+<h3 id="policy-and-validation-failures">Policy and Validation Failures<a class="headerlink" href="#policy-and-validation-failures" title="Permanent link">&para;</a></h3>
+<p>Policy or validation failures immediately respond with <code>DENY_*</code> or <code>BAD_*</code> codes without invoking <code>zfs</code>.</p>
+<h3 id="runtime-errors">Runtime Errors<a class="headerlink" href="#runtime-errors" title="Permanent link">&para;</a></h3>
+<p>Runtime errors while servicing connections generate <code>"ERROR"</code> responses and get logged with truncated info payloads.</p>
+<h3 id="connection-handling">Connection Handling<a class="headerlink" href="#connection-handling" title="Permanent link">&para;</a></h3>
+<p>The main accept loop tolerates transient exceptions (sleeping 50 ms) and exits cleanly on <code>KeyboardInterrupt</code>.</p>
+<h2 id="deployment-considerations">Deployment Considerations<a class="headerlink" href="#deployment-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="systemd-socket-activation">Systemd Socket Activation<a class="headerlink" href="#systemd-socket-activation" title="Permanent link">&para;</a></h3>
+<p>Systemd socket activation is supported by inheriting file descriptor 3 when <code>LISTEN_FDS=1</code>.</p>
+<h3 id="manual-socket-management">Manual Socket Management<a class="headerlink" href="#manual-socket-management" title="Permanent link">&para;</a></h3>
+<p>Without socket activation, ensure the daemon can create <code>/run/zfs-helper.sock</code> and that the <code>zfshelper</code> group contains trusted user services.</p>
+<h3 id="policy-hot-loading">Policy Hot-Loading<a class="headerlink" href="#policy-hot-loading" title="Permanent link">&para;</a></h3>
+<p>Policies are hot-loaded per request; updates to files take effect on the next action without restarting the daemon.</p>
+<h2 id="performance-considerations_1">Performance Considerations<a class="headerlink" href="#performance-considerations_1" title="Permanent link">&para;</a></h2>
+<h3 id="socket-activation_1">Socket Activation<a class="headerlink" href="#socket-activation_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Lazy Loading</strong>: Daemon starts only when needed</li>
+<li><strong>Resource Efficiency</strong>: No continuous background process</li>
+<li><strong>Fast Startup</strong>: Minimal initialization overhead</li>
+</ul>
+<h3 id="policy-caching_1">Policy Caching<a class="headerlink" href="#policy-caching_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>File Watching</strong>: Reload policies on file changes</li>
+<li><strong>Memory Caching</strong>: Keep parsed policies in memory</li>
+<li><strong>Glob Compilation</strong>: Pre-compile patterns for performance</li>
+</ul>
+<h3 id="zfs-command-optimization_1">ZFS Command Optimization<a class="headerlink" href="#zfs-command-optimization_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Direct Execution</strong>: No shell interpretation overhead</li>
+<li><strong>Minimal Parsing</strong>: Extract only necessary output</li>
+<li><strong>Error Propagation</strong>: Preserve exit codes and messages</li>
+</ul>
+<h2 id="scalability_1">Scalability<a class="headerlink" href="#scalability_1" title="Permanent link">&para;</a></h2>
+<h3 id="concurrent-requests_1">Concurrent Requests<a class="headerlink" href="#concurrent-requests_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Single-threaded</strong>: Prevents race conditions</li>
+<li><strong>Request Queuing</strong>: Socket backlog handles bursts</li>
+<li><strong>Fast Processing</strong>: Sub-millisecond policy decisions</li>
+</ul>
+<h3 id="multi-user-support_1">Multi-User Support<a class="headerlink" href="#multi-user-support_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Per-User Policies</strong>: Isolated configuration</li>
+<li><strong>Shared Infrastructure</strong>: Single daemon serves all users</li>
+<li><strong>Efficient Lookup</strong>: O(1) policy file access</li>
+</ul>
+<h2 id="future-architecture-considerations">Future Architecture Considerations<a class="headerlink" href="#future-architecture-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="potential-enhancements">Potential Enhancements<a class="headerlink" href="#potential-enhancements" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Multi-threaded Processing</strong>: For high-concurrency environments</li>
+<li><strong>Policy Caching</strong>: Redis/memory-based policy store</li>
+<li><strong>Remote Management</strong>: Web UI for policy administration</li>
+<li><strong>Audit Database</strong>: Structured storage for log analysis</li>
+<li><strong>Plugin Architecture</strong>: Extensible operation handlers</li>
+<li><strong>Performance Metrics</strong>: Prometheus integration</li>
+<li><strong>Configuration Management</strong>: Ansible/Puppet modules</li>
+</ol>
+<h3 id="backwards-compatibility">Backwards Compatibility<a class="headerlink" href="#backwards-compatibility" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>API Versioning</strong>: JSON protocol versioning</li>
+<li><strong>Policy Migration</strong>: Automatic policy file updates</li>
+<li><strong>Configuration Compatibility</strong>: Maintain existing file formats</li>
+</ul>
 
 
 
@@ -906,30 +2286,10 @@
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
-    <div class="md-copyright__highlight">
-      Copyright &copy; 2025 Alex O. Karasulu
-    </div>
   
-  
-</div>
-      
-        
-<div class="md-social">
-  
-    
-    
-    
-    
-    <a href="https://github.com/akarasulu/zfs-helper" target="_blank" rel="noopener" title="Source Code" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
-    </a>
-  
-    
-    
-    
-    
-    <a href="https://akarasulu.github.io/zfs-helper/" target="_blank" rel="noopener" title="Documentation" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M384 512H96c-53 0-96-43-96-96V96C0 43 43 0 96 0h304c26.5 0 48 21.5 48 48v288c0 20.9-13.4 38.7-32 45.3V448c17.7 0 32 14.3 32 32s-14.3 32-32 32zM96 384c-17.7 0-32 14.3-32 32s14.3 32 32 32h256v-64zm32-232c0 13.3 10.7 24 24 24h176c13.3 0 24-10.7 24-24s-10.7-24-24-24H152c-13.3 0-24 10.7-24 24m24 72c-13.3 0-24 10.7-24 24s10.7 24 24 24h176c13.3 0 24-10.7 24-24s-10.7-24-24-24z"/></svg>
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
     </a>
   
 </div>
@@ -946,7 +2306,7 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.instant", "navigation.tracking", "navigation.indexes", "search.highlight", "search.share", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>

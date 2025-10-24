@@ -1,0 +1,1498 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Secure ZFS delegation helper for unprivileged services">
+      
+      
+      
+      
+        <link rel="prev" href="../usage/">
+      
+      
+        <link rel="next" href="../design/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
+    
+    
+      
+        <title>Policy Configuration - ZFS Helper</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#policy-configuration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ZFS Helper" class="md-header__button md-logo" aria-label="ZFS Helper" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZFS Helper
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Policy Configuration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/akarasulu/zfs-helper" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    zfs-helper
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quick Start
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../installation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Installation
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Usage Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Policy Configuration
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../design/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture & Design
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../testing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing Framework
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../release/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Release Process
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ZFS Helper" class="md-nav__button md-logo" aria-label="ZFS Helper" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ZFS Helper
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/akarasulu/zfs-helper" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    zfs-helper
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Usage Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Policy Configuration
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Policy Configuration
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#policy-directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Directory Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Directory Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service Authorization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-operation-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataset Operation Lists
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-value-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Property Value Constraints
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-and-dataset-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      User and Dataset Matching
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User and Dataset Matching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      User Specifications
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-glob-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataset Glob Patterns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-policy-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Complete Policy Example
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete Policy Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydaliceunitslist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/units.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicemountlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/mount.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicesnapshotlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/snapshot.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicecreatelist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/create.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicedestroylist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/destroy.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicesetproplist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/setprop.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicesetpropvalueslist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/setprop.values.list
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-rules-and-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Rules and Logic
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Rules and Logic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorization-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authorization Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deny-by-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deny-by-Default
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-merging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule Merging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-management-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Management Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Management Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#security-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Guidelines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#organization-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      Organization Tips
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Synchronization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Synchronization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preview-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Changes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apply-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Apply Changes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Important Notes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting Policies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting Policies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#permission-denied-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Permission Denied Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-not-taking-effect" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Not Taking Effect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture & Design
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Testing Framework
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Process
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#policy-directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Directory Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Directory Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#service-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Service Authorization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-operation-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataset Operation Lists
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property-value-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Property Value Constraints
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-and-dataset-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      User and Dataset Matching
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User and Dataset Matching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      User Specifications
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-glob-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataset Glob Patterns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-policy-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Complete Policy Example
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete Policy Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydaliceunitslist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/units.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicemountlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/mount.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicesnapshotlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/snapshot.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicecreatelist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/create.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicedestroylist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/destroy.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicesetproplist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/setprop.list
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etczfs-helperpolicydalicesetpropvalueslist" class="md-nav__link">
+    <span class="md-ellipsis">
+      /etc/zfs-helper/policy.d/alice/setprop.values.list
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-rules-and-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Rules and Logic
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Rules and Logic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorization-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authorization Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deny-by-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deny-by-Default
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-merging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule Merging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-management-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Management Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Management Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#security-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Guidelines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#organization-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      Organization Tips
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Synchronization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy Synchronization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preview-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preview Changes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apply-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Apply Changes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Important Notes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting Policies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting Policies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#permission-denied-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Permission Denied Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#policy-not-taking-effect" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy Not Taking Effect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="policy-configuration">Policy Configuration<a class="headerlink" href="#policy-configuration" title="Permanent link">&para;</a></h1>
+<p>ZFS Helper uses a policy-based authorization system to control which users and services can perform ZFS operations on specific datasets. This provides fine-grained security while maintaining ease of administration.</p>
+<h2 id="policy-directory-structure">Policy Directory Structure<a class="headerlink" href="#policy-directory-structure" title="Permanent link">&para;</a></h2>
+<p>Per-user policy configuration is stored under:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/etc/zfs-helper/policy.d/&lt;username&gt;/
+</code></pre></div></p>
+<p>Each user directory can contain the following policy files:</p>
+<h3 id="service-authorization">Service Authorization<a class="headerlink" href="#service-authorization" title="Permanent link">&para;</a></h3>
+<p><strong><code>units.list</code></strong> - Glob patterns for allowed systemd user unit names
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>backup@*.service
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sync.service
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>container-*.service
+</code></pre></div></p>
+<h3 id="dataset-operation-lists">Dataset Operation Lists<a class="headerlink" href="#dataset-operation-lists" title="Permanent link">&para;</a></h3>
+<p>Dataset-scoped lists that expect one entry per line in the format:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>&lt;user&gt; &lt;dataset-glob&gt;
+</code></pre></div></p>
+<p><strong>Available operation files:</strong>
+- <code>mount.list</code> - Datasets the user can mount
+- <code>unmount.list</code> - Datasets the user can unmount (optional - inherits from mount.list if not present)
+- <code>snapshot.list</code> - Datasets the user can snapshot
+- <code>rollback.list</code> - Datasets the user can rollback
+- <code>create.list</code> - Datasets the user can create
+- <code>destroy.list</code> - Datasets the user can destroy
+- <code>rename.from.list</code> - Source datasets for rename operations
+- <code>rename.to.list</code> - Target datasets for rename operations
+- <code>share.list</code> - Datasets the user can share
+- <code>setprop.list</code> - Datasets where the user can set properties</p>
+<h3 id="property-value-constraints">Property Value Constraints<a class="headerlink" href="#property-value-constraints" title="Permanent link">&para;</a></h3>
+<p><strong><code>setprop.values.list</code></strong> - Allowed property values for setprop operations
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>canmount=on
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>canmount=noauto
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>canmount=off
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>sharenfs=on
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>sharenfs=off
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>mountpoint:/home/alice*
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>mountpoint:/var/lib/containers*
+</code></pre></div></p>
+<h2 id="user-and-dataset-matching">User and Dataset Matching<a class="headerlink" href="#user-and-dataset-matching" title="Permanent link">&para;</a></h2>
+<h3 id="user-specifications">User Specifications<a class="headerlink" href="#user-specifications" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Use the literal username: <code>alice</code></li>
+<li>Use wildcard for any zfshelper member: <code>*</code></li>
+</ul>
+<h3 id="dataset-glob-patterns">Dataset Glob Patterns<a class="headerlink" href="#dataset-glob-patterns" title="Permanent link">&para;</a></h3>
+<p>ZFS Helper uses gitignore-style wildcards:
+- <code>*</code> - Matches within a single dataset component
+- <code>**</code> - Matches across dataset components
+- <code>?</code> - Matches a single character</p>
+<p><strong>Examples:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alice tank/home/alice/**     # Alice can access any dataset under her home
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>*     tank/projects/shared/*  # Any user can access shared project datasets
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>bob   tank/backup/bob         # Bob can access his specific backup dataset
+</code></pre></div></p>
+<h2 id="complete-policy-example">Complete Policy Example<a class="headerlink" href="#complete-policy-example" title="Permanent link">&para;</a></h2>
+<p>Here's a complete policy setup for user "alice":</p>
+<h3 id="etczfs-helperpolicydaliceunitslist"><code>/etc/zfs-helper/policy.d/alice/units.list</code><a class="headerlink" href="#etczfs-helperpolicydaliceunitslist" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>backup@*.service
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>container@*.service
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>sync.service
+</code></pre></div>
+<h3 id="etczfs-helperpolicydalicemountlist"><code>/etc/zfs-helper/policy.d/alice/mount.list</code><a class="headerlink" href="#etczfs-helperpolicydalicemountlist" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>alice tank/home/alice
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>alice tank/home/alice/**
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>*     tank/shared/*
+</code></pre></div>
+<h3 id="etczfs-helperpolicydalicesnapshotlist"><code>/etc/zfs-helper/policy.d/alice/snapshot.list</code><a class="headerlink" href="#etczfs-helperpolicydalicesnapshotlist" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>alice tank/home/alice
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>alice tank/home/alice/**
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>alice tank/backup/alice/**
+</code></pre></div>
+<h3 id="etczfs-helperpolicydalicecreatelist"><code>/etc/zfs-helper/policy.d/alice/create.list</code><a class="headerlink" href="#etczfs-helperpolicydalicecreatelist" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>alice tank/scratch/*
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>alice tank/home/alice/tmp/*
+</code></pre></div>
+<h3 id="etczfs-helperpolicydalicedestroylist"><code>/etc/zfs-helper/policy.d/alice/destroy.list</code><a class="headerlink" href="#etczfs-helperpolicydalicedestroylist" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>alice tank/scratch/*
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>alice tank/home/alice/tmp/*
+</code></pre></div>
+<h3 id="etczfs-helperpolicydalicesetproplist"><code>/etc/zfs-helper/policy.d/alice/setprop.list</code><a class="headerlink" href="#etczfs-helperpolicydalicesetproplist" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>alice tank/home/alice/**
+</code></pre></div>
+<h3 id="etczfs-helperpolicydalicesetpropvalueslist"><code>/etc/zfs-helper/policy.d/alice/setprop.values.list</code><a class="headerlink" href="#etczfs-helperpolicydalicesetpropvalueslist" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>canmount=on
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>canmount=noauto
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>mountpoint:/home/alice*
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>sharenfs=off
+</code></pre></div>
+<h2 id="policy-rules-and-logic">Policy Rules and Logic<a class="headerlink" href="#policy-rules-and-logic" title="Permanent link">&para;</a></h2>
+<h3 id="authorization-flow">Authorization Flow<a class="headerlink" href="#authorization-flow" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Group membership</strong>: User must be in <code>zfshelper</code> group</li>
+<li><strong>Service origin</strong>: Must be called from authorized systemd user service</li>
+<li><strong>Unit authorization</strong>: Service name must match patterns in <code>units.list</code></li>
+<li><strong>Operation authorization</strong>: Dataset must match patterns in operation-specific list</li>
+<li><strong>Value constraints</strong>: For setprop, values must match <code>setprop.values.list</code></li>
+</ol>
+<h3 id="deny-by-default">Deny-by-Default<a class="headerlink" href="#deny-by-default" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Absence of an allow rule = deny</li>
+<li>Empty policy files = no permissions</li>
+<li>Missing operation files = no permissions for that operation</li>
+</ul>
+<h3 id="rule-merging">Rule Merging<a class="headerlink" href="#rule-merging" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Any matching allow rule grants permission</li>
+<li>Multiple matching rules don't conflict</li>
+<li>More specific rules don't override broader ones</li>
+</ul>
+<h2 id="policy-management-best-practices">Policy Management Best Practices<a class="headerlink" href="#policy-management-best-practices" title="Permanent link">&para;</a></h2>
+<h3 id="security-guidelines">Security Guidelines<a class="headerlink" href="#security-guidelines" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Principle of least privilege</strong>: Grant minimal necessary permissions</li>
+<li><strong>User-specific directories</strong>: Keep policies focused on individual users</li>
+<li><strong>Regular audits</strong>: Review and update policies periodically</li>
+<li><strong>Test changes</strong>: Use <code>apply-delegation.py --dry-run</code> to preview changes</li>
+</ol>
+<h3 id="organization-tips">Organization Tips<a class="headerlink" href="#organization-tips" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Consistent naming</strong>: Use clear, descriptive dataset names</li>
+<li><strong>Logical grouping</strong>: Group related datasets under common prefixes</li>
+<li><strong>Documentation</strong>: Comment policy decisions in separate documentation</li>
+<li><strong>Version control</strong>: Track policy changes in git</li>
+</ol>
+<h2 id="policy-synchronization">Policy Synchronization<a class="headerlink" href="#policy-synchronization" title="Permanent link">&para;</a></h2>
+<p>ZFS Helper policies can be synchronized with native ZFS delegation using the <code>apply-delegation.py</code> tool:</p>
+<h3 id="preview-changes">Preview Changes<a class="headerlink" href="#preview-changes" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>sudo<span class="w"> </span>/usr/sbin/apply-delegation.py<span class="w"> </span>--dry-run
+</code></pre></div>
+<h3 id="apply-changes">Apply Changes<a class="headerlink" href="#apply-changes" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>/usr/sbin/apply-delegation.py
+</code></pre></div>
+<h3 id="important-notes">Important Notes<a class="headerlink" href="#important-notes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The script manages a focused set of permissions</li>
+<li>Operations that OpenZFS refuses to delegate are skipped but reported</li>
+<li>Avoid running for datasets that don't exist yet</li>
+<li>Wildcards resolve only to present dataset names</li>
+</ul>
+<h2 id="troubleshooting-policies">Troubleshooting Policies<a class="headerlink" href="#troubleshooting-policies" title="Permanent link">&para;</a></h2>
+<h3 id="permission-denied-errors">Permission Denied Errors<a class="headerlink" href="#permission-denied-errors" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Check user is in <code>zfshelper</code> group: <code>groups username</code></li>
+<li>Verify service name matches <code>units.list</code> patterns</li>
+<li>Confirm dataset matches operation-specific list</li>
+<li>For setprop, verify value is in <code>setprop.values.list</code></li>
+</ol>
+<h3 id="policy-not-taking-effect">Policy Not Taking Effect<a class="headerlink" href="#policy-not-taking-effect" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Restart the zfs-helper service: <code>sudo systemctl restart zfs-helper.service</code></li>
+<li>Check policy file syntax and permissions</li>
+<li>Verify policy directory ownership: <code>ls -la /etc/zfs-helper/policy.d/</code></li>
+</ol>
+<h3 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h3>
+<p>Check the service logs for detailed authorization decisions:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>zfs-helper.service<span class="w"> </span>-f
+</code></pre></div></p>
+<p>All authorization decisions are logged in structured JSON format with clear ALLOW/DENY/ERROR reasons.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

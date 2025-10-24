@@ -5,7 +5,7 @@ REPO_URL="https://akarasulu.github.io/zfs-helper/apt"
 KEY_DEST="/etc/apt/trusted.gpg.d/zfs-helper.asc"
 LIST_DEST="/etc/apt/sources.list.d/zfs-helper.list"
 
-echo "🔧 Adding Zfs Helper APT repository..."
+echo "🔧 Adding ZFS Helper APT repository..."
 
 # Check if we're on a system that supports the modern method
 if [[ -d "/etc/apt/trusted.gpg.d" ]]; then
@@ -30,4 +30,4 @@ sudo apt update
 
 echo "🎉 Repository added successfully!"
 echo "📦 Install packages with: sudo apt install <package-name>"
-echo "📋 Available packages: dev-tools,hello-world,mock-monitor,sys-info"
+echo "📋 Available packages: dev-tools,hello-world,mock-monitor,sys-info,zfs-helper-client,zfs-helper"

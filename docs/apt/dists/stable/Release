@@ -1,39 +1,39 @@
 Origin: zfs-helper
-Label: Zfs Helper APT Repository
+Label: ZFS Helper APT Repository
 Suite: stable
 Version: 1.0
 Codename: stable
-Date: Fri, 24 Oct 2025 08:28:13 +0000
+Date: Fri, 24 Oct 2025 11:05:56 +0000
 Architectures: amd64 arm64 all
 Components: main
-Description: APT repository for Zfs Helper hosted on GitHub Pages
+Description: APT repository for ZFS Helper hosted on GitHub Pages
 MD5Sum:
- 1f335eaebaac30de1c7b0f3cfd7c2da8    1320 main/binary-amd64/Packages.gz
- 6d2397506fb025d1a79ca8c20e9030b3    1369 main/binary-amd64/Packages.bz2
- 015d89c66495b59b8a516c7e477a76b0    2788 main/binary-amd64/Packages
- 9935a48100ac5f53c28f2e65ef1973ce    1044 main/binary-all/Packages.gz
- 8f29d5f5651f1e81457d37ba2a4289d6    1095 main/binary-all/Packages.bz2
- dfd02a30456a70746b0b425095e5c1f2    2072 main/binary-all/Packages
- c3c323e18d9dc4332a0399f2cafdc598      29 main/binary-arm64/Packages.gz
+ 91a910e9f31e8cd90c1b8f3e8a96e4c4    2120 main/binary-amd64/Packages.gz
+ 2c963c4d8aea318fc21295fcbc3eaa8b    2125 main/binary-amd64/Packages.bz2
+ 51ba25b607af960434b8a687715019d2    4937 main/binary-amd64/Packages
+ 0a0792e5b9a51e1bf7fec45003eb7dad    1839 main/binary-all/Packages.gz
+ 953a40d817cc84e9bce468f969942feb    1873 main/binary-all/Packages.bz2
+ d16c575cc86fb18dfb7b14c8b3c2ab24    4221 main/binary-all/Packages
+ 9cc6a479ba0b4e770524fc401ef62572      29 main/binary-arm64/Packages.gz
  4059d198768f9f8dc9372dc1c54bc3c3      14 main/binary-arm64/Packages.bz2
  d41d8cd98f00b204e9800998ecf8427e       0 main/binary-arm64/Packages
 SHA1:
- 1606b245a8b88ea95baa9f9d68bffefe73b6f016    1320 main/binary-amd64/Packages.gz
- 48b60b1958c74ca8903fda7731778fec1ad69f98    1369 main/binary-amd64/Packages.bz2
- f9f4453b6a252fa2d3407dec093a1802dfd39187    2788 main/binary-amd64/Packages
- d04bda1201f29c5146ce3d792cd9f7babdd016f9    1044 main/binary-all/Packages.gz
- 89b3894968c1c5ab2d13d5bafd6f9a864c541cfb    1095 main/binary-all/Packages.bz2
- a7b67854ebed7f0c41c5b85aa098cf5454c54d84    2072 main/binary-all/Packages
- a113f7835e6a8043880653bb2d6a6718af75de5b      29 main/binary-arm64/Packages.gz
+ f392417f53f0e8161391f4f23d69f7e0462cad34    2120 main/binary-amd64/Packages.gz
+ 85df6b2d51bce37d6683bfdb57f0a348a16b2b52    2125 main/binary-amd64/Packages.bz2
+ 77776d313cc69c64cab6956035c603b7eac1e07e    4937 main/binary-amd64/Packages
+ 3c0ea718efa8481444e758aa7f6d71f85395be3f    1839 main/binary-all/Packages.gz
+ 1a80cf0321bdf730a525fe13531b748adce1e71d    1873 main/binary-all/Packages.bz2
+ 6ef734f85a774e5dbf57c43c18b9ae64b36f1074    4221 main/binary-all/Packages
+ 32959f4663f558f0861656f77e34e60c9d47ec9f      29 main/binary-arm64/Packages.gz
  64a543afbb5f4bf728636bdcbbe7a2ed0804adc2      14 main/binary-arm64/Packages.bz2
  da39a3ee5e6b4b0d3255bfef95601890afd80709       0 main/binary-arm64/Packages
 SHA256:
- 5e0977c26b7278b8b77d90cccb1d8b9d4c18ede7d46423313da94128e097a2c4    1320 main/binary-amd64/Packages.gz
- d65c33a6663fdd4ca19134b43678dfa9ee1e98a75dcc60b1ffc5c4714be08bd1    1369 main/binary-amd64/Packages.bz2
- 0a2abca0d45af9bcfb6a856b57055f5dc334d30a668eefa5a0bf865e3a9c8e44    2788 main/binary-amd64/Packages
- 3477c63c141a09acb0d6a4a950f3df7c90bac4151ccd616b1803588b55ff54c3    1044 main/binary-all/Packages.gz
- e9796e7dc9f3feef7f924d26fa2a0e6c43241df1549096bd1ded4bdc3550d454    1095 main/binary-all/Packages.bz2
- 183c66d04874d34e7f51f2aaa616cc1b7f4b4285acdb5142b1beb779be363782    2072 main/binary-all/Packages
- 18d31dcf5c99bad47eda30cf58a33b876aa392be5ddf9a381d98e200c43f453f      29 main/binary-arm64/Packages.gz
+ 0b6c6723d37b3dfd8d8299fb04235ba967dd3d1e6529d459c6b2be9a83dd4fe5    2120 main/binary-amd64/Packages.gz
+ 2616f82112d22c5f150e13d5edb95b08fa5dcaabdade4833601d66ec59bb3fb5    2125 main/binary-amd64/Packages.bz2
+ fee8708fe1affb56ead21a92fd28f16817e60415ab72a0e7ce05a1d106ef353a    4937 main/binary-amd64/Packages
+ 7efb1d4238d49d51c035c0afd32d02cfb5c19531499f9a8d41eb937ba6911afb    1839 main/binary-all/Packages.gz
+ 2999467d72f00f6d687f1d5472c120616ce966b11d44965a3042eb82e9d86cc5    1873 main/binary-all/Packages.bz2
+ 98c146fc002bb76d5ba6b474ea5185b2cacebd99fe6547d0948cea6fc7ba6975    4221 main/binary-all/Packages
+ a8fb6b85b0986145b8bb1ee6dc22ed503bae612d12ec28c2180b2656c5f5beb4      29 main/binary-arm64/Packages.gz
  d3dda84eb03b9738d118eb2be78e246106900493c0ae07819ad60815134a8058      14 main/binary-arm64/Packages.bz2
  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855       0 main/binary-arm64/Packages

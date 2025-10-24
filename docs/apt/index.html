@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Zfs Helper APT Repository</title>
+    <title>ZFS Helper APT Repository</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; }
         .container { max-width: 800px; margin: 0 auto; }
@@ -11,8 +11,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Zfs Helper APT Repository</h1>
-        <p>This is an APT repository hosted on GitHub Pages for <strong>Zfs Helper</strong>.</p>
+        <h1>ZFS Helper APT Repository</h1>
+        <p>This is an APT repository hosted on GitHub Pages for <strong>ZFS Helper</strong>.</p>
         
         <h2>Quick Setup</h2>
         <pre><code># Download and run setup script
@@ -73,6 +73,37 @@ sudo apt update</code></pre>
  - Manual pages installation
  - Build process with compilation</p>
                 <code>sudo apt install sys-info</code>
+            </div>
+            <div class="package">
+                <h3>zfs-helper-client (1.0.0)</h3>
+                <p>Client tools for ZFS delegation helper
+ Client-side utilities for the zfs-helper system that allows unprivileged
+ systemd user-scoped services to perform secure ZFS operations.
+ .
+ This package contains the zfs-helperctl command-line tool that communicates
+ with the zfs-helper daemon to request ZFS operations, along with example
+ user service templates and comprehensive documentation.
+ .
+ Install this package on systems where users need to perform ZFS operations
+ through the zfs-helper delegation system.</p>
+                <code>sudo apt install zfs-helper-client</code>
+            </div>
+            <div class="package">
+                <h3>zfs-helper (1.0.0)</h3>
+                <p>ZFS delegation helper daemon for secure unprivileged ZFS operations
+ A Linux OpenZFS delegation helper service that allows unprivileged systemd
+ user-scoped services to securely request ZFS operations (mount, snapshot,
+ rollback, create, destroy, rename, setprop, and share) on specific datasets
+ and snapshots via a privileged socket-activated helper daemon.
+ .
+ The privileged gateway service securely overcomes delegation limitations
+ resulting from ZFS ports to Linux. It follows a fine-grained user, operation,
+ and delegate service policy with comprehensive audit logging.
+ .
+ This package contains the core daemon and systemd units that run with
+ root privileges to perform ZFS operations on behalf of authorized
+ unprivileged services.</p>
+                <code>sudo apt install zfs-helper</code>
             </div>
         </div>
     </div>
