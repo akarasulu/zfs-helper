@@ -29,6 +29,7 @@
     "pymdownx",
     "pytest",
     "Quadlets",
+    "raidz",
     "returncode",
     "setprop",
     "sharenfs",
