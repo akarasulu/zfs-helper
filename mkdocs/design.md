@@ -1,6 +1,6 @@
 # Architecture & Design
 
-ZFS Helper implements a secure privilege delegation architecture that bridges the gap between unprivileged user services and privileged ZFS operations.
+ZFS Helper implements a secure privileged delegation architecture that bridges the gap between unprivileged user services and privileged ZFS operations.
 
 ## Summary
 
@@ -20,10 +20,10 @@ graph TD
 
 ## System Overview
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    User Space (Unprivileged)                    │
-├─────────────────────────────────────────────────────────────────┤
+```text
+┌──────────────────────────────────────────────────────────────────┐
+│                    User Space (Unprivileged)                     │
+├──────────────────────────────────────────────────────────────────┤
 │  ┌─────────────────┐    ┌──────────────────────────────────────┐ │
 │  │ User Services   │    │ User Applications                    │ │
 │  │ - backup@.srv   │    │ - Container engines                  │ │
@@ -37,16 +37,16 @@ graph TD
 │                  │ zfs-helperctl   │                             │
 │                  │ (Client Tool)   │                             │
 │                  └────────┬────────┘                             │
-├───────────────────────────┼─────────────────────────────────────┤
+├───────────────────────────┼──────────────────────────────────────┤
 │                           │                                      │
 │              ┌────────────▼────────────┐                         │
 │              │    UNIX Socket          │                         │
 │              │ /run/zfs-helper.sock    │                         │
 │              │   (root:zfshelper)      │                         │
 │              └────────────┬────────────┘                         │
-├───────────────────────────┼─────────────────────────────────────┤
-│                    Root Space (Privileged)                      │
-├───────────────────────────┼─────────────────────────────────────┤
+├───────────────────────────┼──────────────────────────────────────┤
+│                    Root Space (Privileged)                       │
+├───────────────────────────┼──────────────────────────────────────┤
 │              ┌────────────▼────────────┐                         │
 │              │   zfs-helper.py         │                         │
 │              │   (Daemon)              │                         │
@@ -70,7 +70,7 @@ graph TD
 │                  │   ZFS Kernel    │                             │
 │                  │   Module        │                             │
 │                  └─────────────────┘                             │
-└─────────────────────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ## Request Lifecycle
@@ -219,17 +219,18 @@ Per-operation files with `<user> <dataset-glob>` entries:
 
 ### Trust Boundaries
 
-```
-┌─────────────────┐    Trust    ┌─────────────────┐
-│   User Space    │─ Boundary ─│   Root Space    │
-│                 │      ↓      │                 │
-│ - User services │     UNIX    │ - zfs-helper    │
-│ - zfs-helperctl │    Socket   │ - Policy files  │
-│ - Client tools  │             │ - ZFS commands  │
-└─────────────────┘             └─────────────────┘
+```text
+┌─────────────────┐     Trust     ┌─────────────────┐
+│   User Space    │──  Boundary ──│   Root Space    │
+│                 │       ↓       │                 │
+│ - User services │      UNIX     │ - zfs-helper    │
+│ - zfs-helperctl │     Socket    │ - Policy files  │
+│ - Client tools  │               │ - ZFS commands  │
+└─────────────────┘               └─────────────────┘
 ```
 
 **Trust Model**:
+
 - User space is **untrusted**
 - Socket provides **authenticated communication**
 - Root space validates **all requests**
@@ -248,15 +249,15 @@ Per-operation files with `<user> <dataset-glob>` entries:
 
 ### Request Processing
 
-```
-┌─────────────┐    JSON     ┌─────────────┐    Validation    ┌─────────────┐
+```text
+┌─────────────┐    JSON      ┌─────────────┐    Validation     ┌─────────────┐
 │zfs-helperctl│────────────▶│zfs-helper.py│─────────────────▶│Policy Engine│
-└─────────────┘             └─────────────┘                  └─────────────┘
+└─────────────┘              └─────────────┘                   └─────────────┘
                                     │                               │
-                            ┌───────▼──────┐               ┌───────▼──────┐
-                            │   ZFS CMD    │               │    ALLOW/    │
+                            ┌───────▼──────┐                ┌───────▼──────┐
+                            │   ZFS CMD    │                │    ALLOW/    │
                             │  Execution   │◀──────────────│     DENY     │
-                            └───────┬──────┘               └──────────────┘
+                            └───────┬──────┘                └──────────────┘
                                     │
                             ┌───────▼──────┐
                             │   Response   │
@@ -278,11 +279,13 @@ Per-operation files with `<user> <dataset-glob>` entries:
 ## Error Handling
 
 ### Client-Side Errors
+
 - **Usage errors**: Invalid arguments, missing parameters
 - **Connection errors**: Socket unavailable, permission denied
 - **Communication errors**: Malformed responses, timeouts
 
 ### Server-Side Errors
+
 - **Authentication errors**: Invalid credentials, group membership
 - **Authorization errors**: Policy violations, unauthorized operations
 - **Execution errors**: ZFS command failures, system errors
@@ -290,6 +293,7 @@ Per-operation files with `<user> <dataset-glob>` entries:
 ### Logging Strategy
 
 All errors are logged with structured JSON containing:
+
 ```json
 {
   "timestamp": "2025-10-24T12:00:00Z",
@@ -308,16 +312,19 @@ All errors are logged with structured JSON containing:
 ## Performance Considerations
 
 ### Socket Activation
+
 - **Lazy Loading**: Daemon starts only when needed
 - **Resource Efficiency**: No continuous background process
 - **Fast Startup**: Minimal initialization overhead
 
 ### Policy Caching
+
 - **File Watching**: Reload policies on file changes
 - **Memory Caching**: Keep parsed policies in memory
 - **Glob Compilation**: Pre-compile patterns for performance
 
 ### ZFS Command Optimization
+
 - **Direct Execution**: No shell interpretation overhead
 - **Minimal Parsing**: Extract only necessary output
 - **Error Propagation**: Preserve exit codes and messages
@@ -325,11 +332,13 @@ All errors are logged with structured JSON containing:
 ## Scalability
 
 ### Concurrent Requests
+
 - **Single-threaded**: Prevents race conditions
 - **Request Queuing**: Socket backlog handles bursts
 - **Fast Processing**: Sub-millisecond policy decisions
 
 ### Multi-User Support
+
 - **Per-User Policies**: Isolated configuration
 - **Shared Infrastructure**: Single daemon serves all users
 - **Efficient Lookup**: O(1) policy file access
@@ -339,10 +348,12 @@ All errors are logged with structured JSON containing:
 `/usr/sbin/apply-delegation.py` ingests the policy tree and issues `zfs allow`/`unallow` calls so OpenZFS delegation matches the helper's view of who may run which operations.
 
 **Managed permissions include**:
+
 - `mount`, `snapshot`, `rollback`, `create`, `destroy`, `rename`, `share` (where supported)
 - Property grants (`property=mountpoint`, `property=canmount`, `property=sharenfs`)
 
 **Usage**:
+
 - Invoke with `--dry-run` to preview changes
 - Run without flags for enforcement
 - Commands that OpenZFS refuses to delegate log warnings but do not abort
@@ -350,38 +361,47 @@ All errors are logged with structured JSON containing:
 ## Failure Handling
 
 ### Policy and Validation Failures
+
 Policy or validation failures immediately respond with `DENY_*` or `BAD_*` codes without invoking `zfs`.
 
 ### Runtime Errors
+
 Runtime errors while servicing connections generate `"ERROR"` responses and get logged with truncated info payloads.
 
 ### Connection Handling
+
 The main accept loop tolerates transient exceptions (sleeping 50 ms) and exits cleanly on `KeyboardInterrupt`.
 
 ## Deployment Considerations
 
 ### Systemd Socket Activation
+
 Systemd socket activation is supported by inheriting file descriptor 3 when `LISTEN_FDS=1`.
 
 ### Manual Socket Management
+
 Without socket activation, ensure the daemon can create `/run/zfs-helper.sock` and that the `zfshelper` group contains trusted user services.
 
 ### Policy Hot-Loading
+
 Policies are hot-loaded per request; updates to files take effect on the next action without restarting the daemon.
 
 ## Performance Considerations
 
 ### Socket Activation
+
 - **Lazy Loading**: Daemon starts only when needed
 - **Resource Efficiency**: No continuous background process
 - **Fast Startup**: Minimal initialization overhead
 
 ### Policy Caching
+
 - **File Watching**: Reload policies on file changes
 - **Memory Caching**: Keep parsed policies in memory
 - **Glob Compilation**: Pre-compile patterns for performance
 
 ### ZFS Command Optimization
+
 - **Direct Execution**: No shell interpretation overhead
 - **Minimal Parsing**: Extract only necessary output
 - **Error Propagation**: Preserve exit codes and messages
@@ -389,11 +409,13 @@ Policies are hot-loaded per request; updates to files take effect on the next ac
 ## Scalability
 
 ### Concurrent Requests
+
 - **Single-threaded**: Prevents race conditions
 - **Request Queuing**: Socket backlog handles bursts
 - **Fast Processing**: Sub-millisecond policy decisions
 
 ### Multi-User Support
+
 - **Per-User Policies**: Isolated configuration
 - **Shared Infrastructure**: Single daemon serves all users
 - **Efficient Lookup**: O(1) policy file access
@@ -401,6 +423,7 @@ Policies are hot-loaded per request; updates to files take effect on the next ac
 ## Future Architecture Considerations
 
 ### Potential Enhancements
+
 1. **Multi-threaded Processing**: For high-concurrency environments
 2. **Policy Caching**: Redis/memory-based policy store
 3. **Remote Management**: Web UI for policy administration
@@ -410,6 +433,7 @@ Policies are hot-loaded per request; updates to files take effect on the next ac
 7. **Configuration Management**: Ansible/Puppet modules
 
 ### Backwards Compatibility
+
 - **API Versioning**: JSON protocol versioning
 - **Policy Migration**: Automatic policy file updates
 - **Configuration Compatibility**: Maintain existing file formats

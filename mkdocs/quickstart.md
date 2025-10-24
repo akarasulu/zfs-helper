@@ -5,7 +5,7 @@ Get ZFS Helper running in 5 minutes with this step-by-step guide.
 ## Prerequisites
 
 - Linux system with systemd ≥ 240
-- OpenZFS installed (`zfsutils-linux`)
+- OpenZFS installed (and `zfsutils-linux`)
 - At least one ZFS pool available
 - Root access for installation
 
@@ -26,9 +26,8 @@ sudo apt install zfs-helper zfs-helper-client
 
 ```bash
 # Download and extract
-wget https://github.com/akarasulu/zfs-helper/archive/main.tar.gz
-tar -xf main.tar.gz
-cd zfs-helper-main
+git clone https://github.com/akarasulu/zfs-helper
+cd zfs-helper
 
 # Run installer
 sudo bash install-zfs-helper.sh --user $USER \
@@ -63,6 +62,8 @@ echo "backup@*.service" | sudo tee /etc/zfs-helper/policy.d/$USER/units.list
 echo "$USER tank/home/$USER" | sudo tee /etc/zfs-helper/policy.d/$USER/snapshot.list
 echo "$USER tank/home/$USER/**" | sudo tee -a /etc/zfs-helper/policy.d/$USER/snapshot.list
 ```
+
+<!-- TODO: test everything out and make sure it works -->
 
 ## Step 4: Create a Test Service
 
@@ -138,4 +139,5 @@ Now that ZFS Helper is working:
 - Ensure the policy pattern matches your dataset
 
 ### Still stuck?
+
 Check the [Usage Guide](usage.md) for more detailed troubleshooting steps.

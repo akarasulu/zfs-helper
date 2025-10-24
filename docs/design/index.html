@@ -1889,7 +1889,7 @@
 
 
 <h1 id="architecture-design">Architecture &amp; Design<a class="headerlink" href="#architecture-design" title="Permanent link">&para;</a></h1>
-<p>ZFS Helper implements a secure privilege delegation architecture that bridges the gap between unprivileged user services and privileged ZFS operations.</p>
+<p>ZFS Helper implements a secure privileged delegation architecture that bridges the gap between unprivileged user services and privileged ZFS operations.</p>
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <p><code>zfs-helper</code> is a privileged UNIX-domain socket daemon that executes a constrained set of <code>zfs(8)</code> operations on behalf of unprivileged systemd user services. Access is governed by per-user policy files stored under <code>/etc/zfs-helper/policy.d/&lt;user&gt;/</code>, allowing fine-grained control over datasets, snapshots, and property mutations. Requests are expressed as single-line JSON payloads; responses echo a JSON object containing a status code and informational string.</p>
 <h2 id="high-level-architecture">High-Level Architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link">&para;</a></h2>
@@ -1901,9 +1901,9 @@
     E --&gt; D
     D --&gt;|Status + info| A</code></pre>
 <h2 id="system-overview">System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                    User Space (Unprivileged)                    │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├─────────────────────────────────────────────────────────────────┤
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌──────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                    User Space (Unprivileged)                     │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├──────────────────────────────────────────────────────────────────┤
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  ┌─────────────────┐    ┌──────────────────────────────────────┐ │
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  │ User Services   │    │ User Applications                    │ │
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  │ - backup@.srv   │    │ - Container engines                  │ │
@@ -1917,16 +1917,16 @@
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│                  │ zfs-helperctl   │                             │
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│                  │ (Client Tool)   │                             │
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│                  └────────┬────────┘                             │
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>├───────────────────────────┼─────────────────────────────────────┤
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>├───────────────────────────┼──────────────────────────────────────┤
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│                           │                                      │
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│              ┌────────────▼────────────┐                         │
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│              │    UNIX Socket          │                         │
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│              │ /run/zfs-helper.sock    │                         │
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│              │   (root:zfshelper)      │                         │
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│              └────────────┬────────────┘                         │
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>├───────────────────────────┼─────────────────────────────────────┤
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│                    Root Space (Privileged)                      │
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>├───────────────────────────┼─────────────────────────────────────┤
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>├───────────────────────────┼──────────────────────────────────────┤
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│                    Root Space (Privileged)                       │
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>├───────────────────────────┼──────────────────────────────────────┤
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│              ┌────────────▼────────────┐                         │
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│              │   zfs-helper.py         │                         │
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│              │   (Daemon)              │                         │
@@ -1950,7 +1950,7 @@
 <a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│                  │   ZFS Kernel    │                             │
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│                  │   Module        │                             │
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│                  └─────────────────┘                             │
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>└─────────────────────────────────────────────────────────────────┘
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>└──────────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <h2 id="request-lifecycle">Request Lifecycle<a class="headerlink" href="#request-lifecycle" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>sequenceDiagram
@@ -2069,20 +2069,22 @@
 <li><strong>Audit Layer</strong>: Comprehensive logging of all decisions</li>
 </ol>
 <h3 id="trust-boundaries">Trust Boundaries<a class="headerlink" href="#trust-boundaries" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>┌─────────────────┐    Trust    ┌─────────────────┐
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│   User Space    │─ Boundary ─│   Root Space    │
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│                 │      ↓      │                 │
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│ - User services │     UNIX    │ - zfs-helper    │
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│ - zfs-helperctl │    Socket   │ - Policy files  │
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│ - Client tools  │             │ - ZFS commands  │
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└─────────────────┘             └─────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>┌─────────────────┐     Trust     ┌─────────────────┐
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│   User Space    │──  Boundary ──│   Root Space    │
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│                 │       ↓       │                 │
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│ - User services │      UNIX     │ - zfs-helper    │
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│ - zfs-helperctl │     Socket    │ - Policy files  │
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│ - Client tools  │               │ - ZFS commands  │
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└─────────────────┘               └─────────────────┘
 </code></pre></div>
-<p><strong>Trust Model</strong>:
-- User space is <strong>untrusted</strong>
-- Socket provides <strong>authenticated communication</strong>
-- Root space validates <strong>all requests</strong>
-- Policy files define <strong>authorized operations</strong>
-- ZFS kernel module is <strong>final arbiter</strong></p>
+<p><strong>Trust Model</strong>:</p>
+<ul>
+<li>User space is <strong>untrusted</strong></li>
+<li>Socket provides <strong>authenticated communication</strong></li>
+<li>Root space validates <strong>all requests</strong></li>
+<li>Policy files define <strong>authorized operations</strong></li>
+<li>ZFS kernel module is <strong>final arbiter</strong></li>
+</ul>
 <h3 id="privilege-escalation-prevention">Privilege Escalation Prevention<a class="headerlink" href="#privilege-escalation-prevention" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>Minimal Capabilities</strong>: Only <code>CAP_SYS_ADMIN</code> and <code>CAP_DAC_READ_SEARCH</code></li>
@@ -2093,14 +2095,14 @@
 </ol>
 <h2 id="data-flow">Data Flow<a class="headerlink" href="#data-flow" title="Permanent link">&para;</a></h2>
 <h3 id="request-processing">Request Processing<a class="headerlink" href="#request-processing" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌─────────────┐    JSON     ┌─────────────┐    Validation    ┌─────────────┐
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌─────────────┐    JSON      ┌─────────────┐    Validation     ┌─────────────┐
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│zfs-helperctl│────────────▶│zfs-helper.py│─────────────────▶│Policy Engine│
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>└─────────────┘             └─────────────┘                  └─────────────┘
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>└─────────────┘              └─────────────┘                   └─────────────┘
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>                                    │                               │
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>                            ┌───────▼──────┐               ┌───────▼──────┐
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>                            │   ZFS CMD    │               │    ALLOW/    │
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>                            ┌───────▼──────┐                ┌───────▼──────┐
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>                            │   ZFS CMD    │                │    ALLOW/    │
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>                            │  Execution   │◀──────────────│     DENY     │
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>                            └───────┬──────┘               └──────────────┘
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>                            └───────┬──────┘                └──────────────┘
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>                                    │
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>                            ┌───────▼──────┐
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>                            │   Response   │
@@ -2132,7 +2134,7 @@
 <li><strong>Execution errors</strong>: ZFS command failures, system errors</li>
 </ul>
 <h3 id="logging-strategy">Logging Strategy<a class="headerlink" href="#logging-strategy" title="Permanent link">&para;</a></h3>
-<p>All errors are logged with structured JSON containing:
+<p>All errors are logged with structured JSON containing:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-10-24T12:00:00Z&quot;</span><span class="p">,</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span>
@@ -2145,7 +2147,7 @@
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dataset not in snapshot.list&quot;</span><span class="p">,</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">&quot;policy_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/etc/zfs-helper/policy.d/alice/snapshot.list&quot;</span>
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">}</span>
-</code></pre></div></p>
+</code></pre></div>
 <h2 id="performance-considerations">Performance Considerations<a class="headerlink" href="#performance-considerations" title="Permanent link">&para;</a></h2>
 <h3 id="socket-activation">Socket Activation<a class="headerlink" href="#socket-activation" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2180,13 +2182,17 @@
 </ul>
 <h2 id="delegation-sync-script">Delegation Sync Script<a class="headerlink" href="#delegation-sync-script" title="Permanent link">&para;</a></h2>
 <p><code>/usr/sbin/apply-delegation.py</code> ingests the policy tree and issues <code>zfs allow</code>/<code>unallow</code> calls so OpenZFS delegation matches the helper's view of who may run which operations.</p>
-<p><strong>Managed permissions include</strong>:
-- <code>mount</code>, <code>snapshot</code>, <code>rollback</code>, <code>create</code>, <code>destroy</code>, <code>rename</code>, <code>share</code> (where supported)
-- Property grants (<code>property=mountpoint</code>, <code>property=canmount</code>, <code>property=sharenfs</code>)</p>
-<p><strong>Usage</strong>:
-- Invoke with <code>--dry-run</code> to preview changes
-- Run without flags for enforcement
-- Commands that OpenZFS refuses to delegate log warnings but do not abort</p>
+<p><strong>Managed permissions include</strong>:</p>
+<ul>
+<li><code>mount</code>, <code>snapshot</code>, <code>rollback</code>, <code>create</code>, <code>destroy</code>, <code>rename</code>, <code>share</code> (where supported)</li>
+<li>Property grants (<code>property=mountpoint</code>, <code>property=canmount</code>, <code>property=sharenfs</code>)</li>
+</ul>
+<p><strong>Usage</strong>:</p>
+<ul>
+<li>Invoke with <code>--dry-run</code> to preview changes</li>
+<li>Run without flags for enforcement</li>
+<li>Commands that OpenZFS refuses to delegate log warnings but do not abort</li>
+</ul>
 <h2 id="failure-handling">Failure Handling<a class="headerlink" href="#failure-handling" title="Permanent link">&para;</a></h2>
 <h3 id="policy-and-validation-failures">Policy and Validation Failures<a class="headerlink" href="#policy-and-validation-failures" title="Permanent link">&para;</a></h3>
 <p>Policy or validation failures immediately respond with <code>DENY_*</code> or <code>BAD_*</code> codes without invoking <code>zfs</code>.</p>

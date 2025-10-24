@@ -83,6 +83,8 @@ echo "alice tank/containers/alice/**" | sudo tee /etc/zfs-helper/policy.d/alice/
 echo "alice tank/containers/alice/**" | sudo tee /etc/zfs-helper/policy.d/alice/create.list
 ```
 
+<!-- TODO: generated examples are dubious -->
+<!-- TODO: put real functional and tested examples here like from brothaman -->
 Example container service:
 ```bash
 cat > ~/.config/systemd/user/container@.service << 'EOF'
@@ -255,7 +257,8 @@ systemd-run --user --wait zfs-helperctl snapshot tank/home/$USER@test
 
 ### Common Issues
 
-**Permission Denied**
+#### Permission Denied
+
 ```bash
 # Check group membership
 groups
@@ -267,7 +270,8 @@ ls -la /etc/zfs-helper/policy.d/$USER/
 grep "$(systemctl --user show -p Id --value)" /etc/zfs-helper/policy.d/$USER/units.list
 ```
 
-**Command Not Found**
+#### Command Not Found
+
 ```bash
 # Ensure zfs-helper-client is installed
 dpkg -l | grep zfs-helper-client
@@ -276,7 +280,8 @@ dpkg -l | grep zfs-helper-client
 echo $PATH
 ```
 
-**Service Won't Start**
+#### Service Won't Start
+
 ```bash
 # Check systemd user session is running
 systemctl --user status
@@ -300,7 +305,6 @@ echo '{"action":"snapshot","target":"test"}' | socat - UNIX-CONNECT:/run/zfs-hel
 
 ## Security Considerations
 
-- Always run from systemd user services, never from interactive shells
 - Regularly audit policy files for unnecessary permissions
 - Monitor zfs-helper logs for unusual activity
 - Keep ZFS Helper and client tools updated

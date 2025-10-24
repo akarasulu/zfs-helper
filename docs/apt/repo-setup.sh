@@ -30,4 +30,4 @@ sudo apt update
 
 echo "🎉 Repository added successfully!"
 echo "📦 Install packages with: sudo apt install <package-name>"
-echo "📋 Available packages: dev-tools,hello-world,mock-monitor,sys-info,zfs-helper-client,zfs-helper"
+echo "📋 Available packages: zfs-helper-client,zfs-helper"

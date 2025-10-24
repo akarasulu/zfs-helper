@@ -810,84 +810,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#security-tests_1" class="md-nav__link">
+  <a href="#security-tests-ii" class="md-nav__link">
     <span class="md-ellipsis">
-      Security Tests
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#continuous-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Continuous Integration
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Continuous Integration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#github-actions" class="md-nav__link">
-    <span class="md-ellipsis">
-      GitHub Actions
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#test-reporting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Test Reporting
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#debugging-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      Debugging Tests
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Debugging Tests">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#log-collection" class="md-nav__link">
-    <span class="md-ellipsis">
-      Log Collection
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vm-debugging" class="md-nav__link">
-    <span class="md-ellipsis">
-      VM Debugging
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#test-debugging" class="md-nav__link">
-    <span class="md-ellipsis">
-      Test Debugging
+      Security Tests II
     </span>
   </a>
   
@@ -1229,84 +1154,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#security-tests_1" class="md-nav__link">
+  <a href="#security-tests-ii" class="md-nav__link">
     <span class="md-ellipsis">
-      Security Tests
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#continuous-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Continuous Integration
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Continuous Integration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#github-actions" class="md-nav__link">
-    <span class="md-ellipsis">
-      GitHub Actions
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#test-reporting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Test Reporting
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#debugging-tests" class="md-nav__link">
-    <span class="md-ellipsis">
-      Debugging Tests
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Debugging Tests">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#log-collection" class="md-nav__link">
-    <span class="md-ellipsis">
-      Log Collection
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vm-debugging" class="md-nav__link">
-    <span class="md-ellipsis">
-      VM Debugging
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#test-debugging" class="md-nav__link">
-    <span class="md-ellipsis">
-      Test Debugging
+      Security Tests II
     </span>
   </a>
   
@@ -1379,6 +1229,9 @@
 
 
 <h1 id="testing-framework">Testing Framework<a class="headerlink" href="#testing-framework" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>WIP</strong>: This section is under active development and may change frequently.</p>
+</blockquote>
 <p>ZFS Helper includes a comprehensive automated test harness using <code>pytest</code> to run integration tests against a Debian 12 VM provisioned via Vagrant and libvirt. Each test executes ZFS operations through the helper in an isolated ephemeral zpool, verifying correct behavior, policy enforcement, ownership, and logging.</p>
 <p>The value of this system lies not just in the code, but in the rigorous testing that ensures correctness and security in real-world scenarios.</p>
 <h2 id="test-architecture">Test Architecture<a class="headerlink" href="#test-architecture" title="Permanent link">&para;</a></h2>
@@ -1545,112 +1398,66 @@
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Save VM snapshot</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>vagrant<span class="w"> </span>snapshot<span class="w"> </span>save<span class="w"> </span>baseline
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># Restore VM snapshot</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>vagrant<span class="w"> </span>snapshot<span class="w"> </span>restore<span class="w"> </span>baseline
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>pytest<span class="w"> </span>tests
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># Restore VM snapshot</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>vagrant<span class="w"> </span>snapshot<span class="w"> </span>restore<span class="w"> </span>baseline
 </code></pre></div>
 <h2 id="test-environment">Test Environment<a class="headerlink" href="#test-environment" title="Permanent link">&para;</a></h2>
 <h3 id="vm-configuration">VM Configuration<a class="headerlink" href="#vm-configuration" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>OS</strong>: Debian 12 (bookworm)</li>
-<li><strong>Memory</strong>: 2GB RAM</li>
-<li><strong>Storage</strong>: Additional virtio disks for ZFS pools</li>
-<li><strong>Network</strong>: NAT with SSH forwarding</li>
+<li><strong>Memory/vCPU</strong>: 4 GB RAM / 4 vCPUs</li>
+<li><strong>Storage</strong>: Additional 3 virtio disks for ZFS pools (/dev/vd{b..d})</li>
 <li><strong>Services</strong>: systemd, ZFS, zfs-helper</li>
 </ul>
 <h3 id="zfs-test-pools">ZFS Test Pools<a class="headerlink" href="#zfs-test-pools" title="Permanent link">&para;</a></h3>
-<p>Each test creates ephemeral zpools:
+<p>Each test creates ephemeral zpools:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Example test pool creation</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>zpool<span class="w"> </span>create<span class="w"> </span>test-pool<span class="w"> </span>/dev/vdb
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>zpool<span class="w"> </span>create<span class="w"> </span>test-pool<span class="w"> </span>/dev/vd<span class="o">{</span>b..d<span class="o">}</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>zfs<span class="w"> </span>create<span class="w"> </span>test-pool/test-dataset
-</code></pre></div></p>
+</code></pre></div>
 <h3 id="policy-test-files">Policy Test Files<a class="headerlink" href="#policy-test-files" title="Permanent link">&para;</a></h3>
-<p>Tests create temporary policy configurations:
+<p>Tests create temporary policy configurations:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>/etc/zfs-helper/policy.d/testuser/
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>├──<span class="w"> </span>units.list
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>├──<span class="w"> </span>mount.list
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>├──<span class="w"> </span>snapshot.list
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>└──<span class="w"> </span>setprop.values.list
-</code></pre></div></p>
+</code></pre></div>
 <h2 id="test-categories">Test Categories<a class="headerlink" href="#test-categories" title="Permanent link">&para;</a></h2>
 <h3 id="smoke-tests">Smoke Tests<a class="headerlink" href="#smoke-tests" title="Permanent link">&para;</a></h3>
-<p>Quick validation of basic functionality:
-- Service startup and socket creation
-- Basic mount/unmount operations
-- Simple snapshot creation
-- Policy file loading</p>
-<h3 id="regression-tests">Regression Tests<a class="headerlink" href="#regression-tests" title="Permanent link">&para;</a></h3>
-<p>Prevent known issues from reoccurring:
-- Previous bug fixes
-- Edge case handling
-- Error condition recovery
-- Performance regressions</p>
-<h3 id="stress-tests">Stress Tests<a class="headerlink" href="#stress-tests" title="Permanent link">&para;</a></h3>
-<p>High-load and concurrent scenarios:
-- Multiple simultaneous requests
-- Large dataset operations
-- Memory usage validation
-- Socket connection limits</p>
-<h3 id="security-tests_1">Security Tests<a class="headerlink" href="#security-tests_1" title="Permanent link">&para;</a></h3>
-<p>Comprehensive security validation:
-- Privilege escalation attempts
-- Policy bypass attempts
-- Input injection testing
-- Authentication bypass testing</p>
-<h2 id="continuous-integration">Continuous Integration<a class="headerlink" href="#continuous-integration" title="Permanent link">&para;</a></h2>
-<h3 id="github-actions">GitHub Actions<a class="headerlink" href="#github-actions" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Test Suite</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">jobs</span><span class="p">:</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">test</span><span class="p">:</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Test Environment</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./scripts/setup-ci.sh</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Tests</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest tests/ --junit-xml=results.xml</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload Results</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-results</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">results.xml</span>
-</code></pre></div>
-<h3 id="test-reporting">Test Reporting<a class="headerlink" href="#test-reporting" title="Permanent link">&para;</a></h3>
+<p>Quick validation of basic functionality:</p>
 <ul>
-<li><strong>Coverage reports</strong>: HTML and console output</li>
-<li><strong>JUnit XML</strong>: CI system integration</li>
-<li><strong>Performance metrics</strong>: Timing and resource usage</li>
-<li><strong>Failure artifacts</strong>: VM snapshots and logs</li>
+<li>Service startup and socket creation</li>
+<li>Basic mount/unmount operations</li>
+<li>Simple snapshot creation</li>
+<li>Policy file loading</li>
 </ul>
-<h2 id="debugging-tests">Debugging Tests<a class="headerlink" href="#debugging-tests" title="Permanent link">&para;</a></h2>
-<h3 id="log-collection">Log Collection<a class="headerlink" href="#log-collection" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Collect all relevant logs</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>zfs-helper.service<span class="w"> </span>&gt;<span class="w"> </span>daemon.log
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>journalctl<span class="w"> </span>--user<span class="w"> </span>&gt;<span class="w"> </span>user-services.log
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>dmesg<span class="w"> </span>&gt;<span class="w"> </span>kernel.log
-</code></pre></div>
-<h3 id="vm-debugging">VM Debugging<a class="headerlink" href="#vm-debugging" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Access test VM</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>vagrant<span class="w"> </span>ssh
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Check ZFS status</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>zfs<span class="w"> </span>list
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>zpool<span class="w"> </span>status
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># Check service status</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>systemctl<span class="w"> </span>status<span class="w"> </span>zfs-helper.socket
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>systemctl<span class="w"> </span>--user<span class="w"> </span>status
-</code></pre></div>
-<h3 id="test-debugging">Test Debugging<a class="headerlink" href="#test-debugging" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Run specific failing test</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>pytest<span class="w"> </span>-v<span class="w"> </span>tests/test_mount.py::test_unauthorized_mount
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Debug with pdb</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>pytest<span class="w"> </span>--pdb<span class="w"> </span>tests/test_mount.py
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Capture stdout</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>pytest<span class="w"> </span>-s<span class="w"> </span>tests/test_mount.py
-</code></pre></div>
+<h3 id="regression-tests">Regression Tests<a class="headerlink" href="#regression-tests" title="Permanent link">&para;</a></h3>
+<p>Prevent known issues from reoccurring:</p>
+<ul>
+<li>Previous bug fixes</li>
+<li>Edge case handling</li>
+<li>Error condition recovery</li>
+<li>Performance regressions</li>
+</ul>
+<h3 id="stress-tests">Stress Tests<a class="headerlink" href="#stress-tests" title="Permanent link">&para;</a></h3>
+<p>High-load and concurrent scenarios:</p>
+<ul>
+<li>Multiple simultaneous requests</li>
+<li>Large dataset operations</li>
+<li>Memory usage validation</li>
+<li>Socket connection limits</li>
+</ul>
+<h3 id="security-tests-ii">Security Tests II<a class="headerlink" href="#security-tests-ii" title="Permanent link">&para;</a></h3>
+<p>Comprehensive security validation:</p>
+<ul>
+<li>Privilege escalation attempts</li>
+<li>Policy bypass attempts</li>
+<li>Input injection testing</li>
+<li>Authentication bypass testing</li>
+</ul>
 <h2 id="contributing-tests">Contributing Tests<a class="headerlink" href="#contributing-tests" title="Permanent link">&para;</a></h2>
 <h3 id="adding-new-tests">Adding New Tests<a class="headerlink" href="#adding-new-tests" title="Permanent link">&para;</a></h3>
 <ol>
@@ -1669,12 +1476,12 @@
 <li><strong>Performance</strong>: Tests should complete reasonably quickly</li>
 </ul>
 <h3 id="mock-usage">Mock Usage<a class="headerlink" href="#mock-usage" title="Permanent link">&para;</a></h3>
-<p>For unit tests, mock external dependencies:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nd">@patch</span><span class="p">(</span><span class="s1">&#39;subprocess.run&#39;</span><span class="p">)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_zfs_command_execution</span><span class="p">(</span><span class="n">mock_run</span><span class="p">):</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">mock_run</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="mi">0</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="c1"># Test logic here</span>
-</code></pre></div></p>
+<p>For unit tests, mock external dependencies:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@patch</span><span class="p">(</span><span class="s1">&#39;subprocess.run&#39;</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_zfs_command_execution</span><span class="p">(</span><span class="n">mock_run</span><span class="p">):</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">mock_run</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="c1"># Test logic here</span>
+</code></pre></div>
 <p>This comprehensive testing framework ensures ZFS Helper maintains high quality, security, and reliability across all supported use cases and environments.</p>
 
 

@@ -1277,22 +1277,22 @@
 
 
 <h1 id="policy-configuration">Policy Configuration<a class="headerlink" href="#policy-configuration" title="Permanent link">&para;</a></h1>
-<p>ZFS Helper uses a policy-based authorization system to control which users and services can perform ZFS operations on specific datasets. This provides fine-grained security while maintaining ease of administration.</p>
+<p>ZFS Helper uses a policy-based authorization system to control which users and services can perform ZFS operations on specific datasets and snapshots. This provides fine-grained security while maintaining ease of administration.</p>
 <h2 id="policy-directory-structure">Policy Directory Structure<a class="headerlink" href="#policy-directory-structure" title="Permanent link">&para;</a></h2>
-<p>Per-user policy configuration is stored under:
+<p>Per-user policy configuration is stored under:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/etc/zfs-helper/policy.d/&lt;username&gt;/
-</code></pre></div></p>
+</code></pre></div>
 <p>Each user directory can contain the following policy files:</p>
 <h3 id="service-authorization">Service Authorization<a class="headerlink" href="#service-authorization" title="Permanent link">&para;</a></h3>
-<p><strong><code>units.list</code></strong> - Glob patterns for allowed systemd user unit names
+<p><strong><code>units.list</code></strong> - Glob patterns for allowed systemd user unit names</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>backup@*.service
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sync.service
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>container-*.service
-</code></pre></div></p>
+</code></pre></div>
 <h3 id="dataset-operation-lists">Dataset Operation Lists<a class="headerlink" href="#dataset-operation-lists" title="Permanent link">&para;</a></h3>
-<p>Dataset-scoped lists that expect one entry per line in the format:
+<p>Dataset-scoped lists that expect one entry per line in the format:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>&lt;user&gt; &lt;dataset-glob&gt;
-</code></pre></div></p>
+</code></pre></div>
 <p><strong>Available operation files:</strong>
 - <code>mount.list</code> - Datasets the user can mount
 - <code>unmount.list</code> - Datasets the user can unmount (optional - inherits from mount.list if not present)
@@ -1305,7 +1305,7 @@
 - <code>share.list</code> - Datasets the user can share
 - <code>setprop.list</code> - Datasets where the user can set properties</p>
 <h3 id="property-value-constraints">Property Value Constraints<a class="headerlink" href="#property-value-constraints" title="Permanent link">&para;</a></h3>
-<p><strong><code>setprop.values.list</code></strong> - Allowed property values for setprop operations
+<p><strong><code>setprop.values.list</code></strong> - Allowed property values for setprop operations</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>canmount=on
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>canmount=noauto
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>canmount=off
@@ -1313,7 +1313,7 @@
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>sharenfs=off
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>mountpoint:/home/alice*
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>mountpoint:/var/lib/containers*
-</code></pre></div></p>
+</code></pre></div>
 <h2 id="user-and-dataset-matching">User and Dataset Matching<a class="headerlink" href="#user-and-dataset-matching" title="Permanent link">&para;</a></h2>
 <h3 id="user-specifications">User Specifications<a class="headerlink" href="#user-specifications" title="Permanent link">&para;</a></h3>
 <ul>
@@ -1321,15 +1321,17 @@
 <li>Use wildcard for any zfshelper member: <code>*</code></li>
 </ul>
 <h3 id="dataset-glob-patterns">Dataset Glob Patterns<a class="headerlink" href="#dataset-glob-patterns" title="Permanent link">&para;</a></h3>
-<p>ZFS Helper uses gitignore-style wildcards:
-- <code>*</code> - Matches within a single dataset component
-- <code>**</code> - Matches across dataset components
-- <code>?</code> - Matches a single character</p>
-<p><strong>Examples:</strong>
+<p>ZFS Helper uses gitignore-style wildcards:</p>
+<ul>
+<li><code>*</code> - Matches within a single dataset component</li>
+<li><code>**</code> - Matches across dataset components</li>
+<li><code>?</code> - Matches a single character</li>
+</ul>
+<p><strong>Examples:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>alice tank/home/alice/**     # Alice can access any dataset under her home
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>*     tank/projects/shared/*  # Any user can access shared project datasets
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>bob   tank/backup/bob         # Bob can access his specific backup dataset
-</code></pre></div></p>
+</code></pre></div>
 <h2 id="complete-policy-example">Complete Policy Example<a class="headerlink" href="#complete-policy-example" title="Permanent link">&para;</a></h2>
 <p>Here's a complete policy setup for user "alice":</p>
 <h3 id="etczfs-helperpolicydaliceunitslist"><code>/etc/zfs-helper/policy.d/alice/units.list</code><a class="headerlink" href="#etczfs-helperpolicydaliceunitslist" title="Permanent link">&para;</a></h3>
@@ -1391,7 +1393,7 @@
 <li><strong>Principle of least privilege</strong>: Grant minimal necessary permissions</li>
 <li><strong>User-specific directories</strong>: Keep policies focused on individual users</li>
 <li><strong>Regular audits</strong>: Review and update policies periodically</li>
-<li><strong>Test changes</strong>: Use <code>apply-delegation.py --dry-run</code> to preview changes</li>
+<li><strong>Push to ZFS</strong>: Use <code>apply-delegation.py --dry-run</code> to apply delegation rules to ZFS</li>
 </ol>
 <h3 id="organization-tips">Organization Tips<a class="headerlink" href="#organization-tips" title="Permanent link">&para;</a></h3>
 <ol>
@@ -1430,9 +1432,9 @@
 <li>Verify policy directory ownership: <code>ls -la /etc/zfs-helper/policy.d/</code></li>
 </ol>
 <h3 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h3>
-<p>Check the service logs for detailed authorization decisions:
+<p>Check the service logs for detailed authorization decisions:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>zfs-helper.service<span class="w"> </span>-f
-</code></pre></div></p>
+</code></pre></div>
 <p>All authorization decisions are logged in structured JSON format with clear ALLOW/DENY/ERROR reasons.</p>
 
 

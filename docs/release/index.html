@@ -626,18 +626,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#local-development-build" class="md-nav__link">
+  <a href="#local-development-build-and-release-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      Local Development Build
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#release-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      Release Workflow
+      Local Development Build and Release Workflow
     </span>
   </a>
   
@@ -822,18 +813,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#local-development-build" class="md-nav__link">
+  <a href="#local-development-build-and-release-workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      Local Development Build
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#release-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      Release Workflow
+      Local Development Build and Release Workflow
     </span>
   </a>
   
@@ -975,7 +957,7 @@
 
 
 <h1 id="release-process">Release Process<a class="headerlink" href="#release-process" title="Permanent link">&para;</a></h1>
-<p>ZFS Helper uses the gh-repos approach for building and releasing Debian packages through a devcontainer-based build system.</p>
+<p>ZFS Helper uses the <a href="https://github.com/akarasulu/gh-repos">gh-repos</a> approach for building and releasing Debian packages through a devcontainer-based build system.</p>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p>Releases are built using GitHub Actions and a Debian 12 devcontainer that includes all necessary packaging tools. The process creates signed Debian packages and publishes them to an APT repository hosted on GitHub Pages.</p>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
@@ -987,56 +969,46 @@
 </ul>
 <h2 id="build-process">Build Process<a class="headerlink" href="#build-process" title="Permanent link">&para;</a></h2>
 <p>The build system uses several scripts in the <code>scripts/</code> directory:</p>
-<h3 id="local-development-build">Local Development Build<a class="headerlink" href="#local-development-build" title="Permanent link">&para;</a></h3>
+<h3 id="local-development-build-and-release-workflow">Local Development Build and Release Workflow<a class="headerlink" href="#local-development-build-and-release-workflow" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Build packages in devcontainer</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/build.sh
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Build Debian packages</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/mkdebs.sh
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Sign repository metadata</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/signrepo.sh
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Build documentation</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>./scripts/mkdocs.sh
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Publish to GitHub Pages</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>./scripts/publish.sh
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Create APT repository</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>./scripts/mkrepo.sh
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Sign repository metadata</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>./scripts/signrepo.sh
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># Publish to GitHub Pages</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>./scripts/publish.sh
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Do a full release uploading artifacts to GitHub</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>./scripts/release.sh
 </code></pre></div>
-<h3 id="release-workflow">Release Workflow<a class="headerlink" href="#release-workflow" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Create and publish a full release</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>./scripts/release.sh<span class="w"> </span><span class="m">1</span>.0.0<span class="w"> </span>release-notes.md
-</code></pre></div>
-<p>This script:
-1. Creates a GPG-signed annotated git tag
-2. Builds Debian packages in the devcontainer
-3. Generates documentation with MkDocs
-4. Creates the APT repository structure
-5. Signs repository metadata with GPG
-6. Creates a GitHub release with artifacts
-7. Publishes to GitHub Pages (gh-pages branch)</p>
+<p>These scripts:</p>
+<ul>
+<li>Creates a GPG-signed annotated git tag</li>
+<li>Builds Debian packages in the devcontainer</li>
+<li>Generates documentation with MkDocs</li>
+<li>Creates the APT repository structure</li>
+<li>Signs repository metadata with GPG</li>
+<li>Creates a GitHub release with artifacts</li>
+<li>Publishes to GitHub Pages (gh-pages branch)</li>
+</ul>
 <h2 id="package-versions">Package Versions<a class="headerlink" href="#package-versions" title="Permanent link">&para;</a></h2>
 <p>Packages are versioned using semantic versioning (MAJOR.MINOR.PATCH):
 - <strong>MAJOR</strong>: Breaking changes to API or configuration
 - <strong>MINOR</strong>: New features, backward-compatible changes
 - <strong>PATCH</strong>: Bug fixes and maintenance updates</p>
 <h2 id="apt-repository-structure">APT Repository Structure<a class="headerlink" href="#apt-repository-structure" title="Permanent link">&para;</a></h2>
-<p>The published APT repository is available at:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>https://akarasulu.github.io/zfs-helper/apt/
-</code></pre></div></p>
+<p>The published APT repository is available at <a href="https://akarasulu.github.io/zfs-helper/apt/">https://akarasulu.github.io/zfs-helper/apt/</a></p>
 <p>Repository structure:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docs/apt/
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── apt-repo-pubkey.asc     # GPG public key for verification
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├── repo-setup.sh           # Installation script for users
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── dists/stable/           # Repository metadata
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│   ├── InRelease           # Signed repository info
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│   ├── Release             # Repository metadata
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│   ├── Release.gpg         # GPG signature
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>│   └── main/               # Package indices
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>└── pool/                   # Package files (.deb)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docs/apt/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── apt-repo-pubkey.asc     # GPG public key for verification
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── repo-setup.sh           # Installation script for users
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>├── dists/stable/           # Repository metadata
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── InRelease           # Signed repository info
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   ├── Release             # Repository metadata
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   ├── Release.gpg         # GPG signature
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│   └── main/               # Package indices
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>└── pool/                   # Package files (.deb)
 </code></pre></div></p>
 <h2 id="security">Security<a class="headerlink" href="#security" title="Permanent link">&para;</a></h2>
 <h3 id="package-signing">Package Signing<a class="headerlink" href="#package-signing" title="Permanent link">&para;</a></h3>
@@ -1053,10 +1025,10 @@
 </ul>
 <h2 id="user-installation">User Installation<a class="headerlink" href="#user-installation" title="Permanent link">&para;</a></h2>
 <p>End users install packages using:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Add repository and install</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://akarasulu.github.io/zfs-helper/apt/repo-setup.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>zfs-helper<span class="w"> </span>zfs-helper-client
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Add repository and install</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://akarasulu.github.io/zfs-helper/apt/repo-setup.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>zfs-helper<span class="w"> </span>zfs-helper-client
 </code></pre></div>
 <h2 id="troubleshooting-releases">Troubleshooting Releases<a class="headerlink" href="#troubleshooting-releases" title="Permanent link">&para;</a></h2>
 <h3 id="build-failures">Build Failures<a class="headerlink" href="#build-failures" title="Permanent link">&para;</a></h3>
@@ -1071,12 +1043,12 @@
 <li>Check GPG agent configuration</li>
 <li>Verify key has appropriate permissions</li>
 </ul>
+<p>Uses the key matching the signature of the public key in <code>keys/apt-repo-pubkey.asc</code>. You can change this by:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># export a gpg pubkey as asc file</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>gpg<span class="w"> </span>--armor<span class="w"> </span>--export<span class="w"> </span>&lt;key-id&gt;<span class="w"> </span>&gt;<span class="w"> </span>keys/apt-repo-pubkey.asc
+</code></pre></div>
 <h3 id="repository-publishing">Repository Publishing<a class="headerlink" href="#repository-publishing" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Confirm GitHub Pages is enabled</li>
-<li>Check gh-pages branch exists and is up to date</li>
-<li>Verify repository structure matches expected format</li>
-</ul>
+<p>Confirm GitHub Pages is enabled. Check settings-&gt;pages in the repository.</p>
 <h2 id="development-workflow">Development Workflow<a class="headerlink" href="#development-workflow" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>Feature Development</strong>: Work on feature branches</li>
@@ -1085,7 +1057,7 @@
 <li><strong>Package Testing</strong>: Build and test packages locally</li>
 <li><strong>Release</strong>: Tag and publish when ready</li>
 </ol>
-<p>The gh-repos approach ensures consistent, reproducible builds and simplifies the release process compared to the previous manual script-based approach.</p>
+<p>The devcontainer approach ensures consistent, reproducible builds and simplifies the release process.</p>
 
 
 

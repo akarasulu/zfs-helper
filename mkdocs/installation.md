@@ -65,14 +65,9 @@ If you prefer to install from source or the packages aren't available for your d
 
 ```bash
 # Download from GitHub releases
-wget https://github.com/akarasulu/zfs-helper/archive/main.tar.gz
-tar -xf main.tar.gz
-cd zfs-helper-main
-```
+git clone https://github.com/akarasulu/zfs-helper
+cd zfs-helper
 
-### Run the Installer
-
-```bash
 # Example installation for a user with specific permissions
 sudo bash install-zfs-helper.sh \
   --user $USER \
@@ -90,6 +85,7 @@ sudo bash install-zfs-helper.sh \
 ```
 
 The installer:
+
 - Creates the `zfshelper` group
 - Installs daemon and client tools
 - Sets up systemd units
@@ -100,7 +96,7 @@ The installer:
 
 ### Add Users to the Group
 
-Users who need to use ZFS Helper must be added to the `zfshelper` group:
+User scoped services running as unprivileged users must be added to the `zfshelper` group:
 
 ```bash
 sudo usermod -aG zfshelper username
@@ -134,22 +130,11 @@ sudo journalctl -u zfs-helper.service -f
 ### Permission Denied
 
 Ensure:
+
 1. User is in the `zfshelper` group
 2. User has logged out and back in
 3. Command is run from an authorized systemd user service
 4. Policy files are configured correctly
-
-### ZFS Command Not Found
-
-Install OpenZFS:
-
-```bash
-# Debian/Ubuntu
-sudo apt install zfsutils-linux
-
-# Red Hat/CentOS/Fedora
-sudo dnf install zfs-utils
-```
 
 ## Next Steps
 
