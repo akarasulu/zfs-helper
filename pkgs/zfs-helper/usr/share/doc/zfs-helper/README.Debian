@@ -1,0 +1,42 @@
+ZFS Helper - Debian Package
+=============================
+
+This package provides the core zfs-helper daemon and systemd units for 
+secure ZFS delegation.
+
+## Installation
+
+The package automatically:
+- Creates the 'zfshelper' system group
+- Installs systemd units and enables the socket
+- Creates the policy configuration directory
+
+## Configuration
+
+After installation, you need to:
+
+1. Add users to the zfshelper group:
+   ```bash
+   sudo usermod -aG zfshelper username
+   ```
+
+2. Create policy files under /etc/zfs-helper/policy.d/username/:
+   - units.list (authorized systemd units)
+   - mount.list, snapshot.list, etc. (dataset permissions)
+
+3. Users need to re-login to pick up group membership
+
+## Policy Synchronization
+
+Use apply-delegation.py to sync policies with ZFS native delegation:
+```bash
+sudo /usr/sbin/apply-delegation.py --dry-run  # preview changes
+sudo /usr/sbin/apply-delegation.py           # apply changes
+```
+
+## Security
+
+The daemon runs with minimal privileges and comprehensive sandboxing.
+All operations are logged with structured JSON for auditing.
+
+See zfs-helper(8) for complete documentation.

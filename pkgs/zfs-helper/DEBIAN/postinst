@@ -1,0 +1,62 @@
+#!/bin/bash
+set -e
+
+# postinst script for zfs-helper
+# see: dh_installdeb(1)
+
+case "$1" in
+    configure)
+        # Create the zfshelper group if it doesn't exist
+        if ! getent group zfshelper >/dev/null 2>&1; then
+            addgroup --system zfshelper
+        fi
+
+        # Set proper permissions on configuration directory
+        if [ -d /etc/zfs-helper ]; then
+            chown root:root /etc/zfs-helper
+            chmod 755 /etc/zfs-helper
+        fi
+
+        if [ -d /etc/zfs-helper/policy.d ]; then
+            chown root:root /etc/zfs-helper/policy.d
+            chmod 755 /etc/zfs-helper/policy.d
+        fi
+
+        # Reload systemd and enable the socket
+        if [ -x /bin/systemctl ]; then
+            systemctl daemon-reload >/dev/null 2>&1 || true
+            systemctl enable zfs-helper.socket >/dev/null 2>&1 || true
+            
+            # Start the socket if systemd is running
+            if systemctl is-system-running >/dev/null 2>&1; then
+                systemctl start zfs-helper.socket >/dev/null 2>&1 || true
+            fi
+        fi
+
+        echo "zfs-helper daemon installed and enabled."
+        echo "Configuration directory: /etc/zfs-helper/policy.d/"
+        echo "Socket: /run/zfs-helper.sock (group zfshelper)"
+        echo ""
+        echo "To configure policies for a user, create:"
+        echo "  /etc/zfs-helper/policy.d/<username>/"
+        echo "  - units.list (allowed systemd user units)"
+        echo "  - mount.list, snapshot.list, etc. (per-action dataset permissions)"
+        echo ""
+        echo "Add users to the zfshelper group:"
+        echo "  usermod -aG zfshelper <username>"
+        echo ""
+        echo "See zfs-helper(8) for complete documentation."
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

@@ -30,12 +30,28 @@ The privileged gateway service securely overcomes delegation limitations resulti
 - `install-zfs-helper.sh` - installer (idempotent)
 - `sbin/zfs-helper.py` - daemon (privileged service driver)
 - `sbin/apply-delegation.py` - synchronizes (as much as is possible) zfs-helper policies with delegated ZFS permissions
-- `bin/zfs-helperctl` - client CLI (used by user-scoped services)
+- `pkgs/zfs-helper-client/usr/bin/zfs-helperctl` - client CLI (used by user-scoped services)
 - `systemd/zfs-helper.socket` & `systemd/zfs-helper.service` - systemd units
 - `examples/user/backup@.service` - demonstrates user-scoped service access to zfs-helper
 - `policy/` - example policy files to seed installations
 
 ## Quick start
+
+### Debian Package Installation (Recommended)
+
+```bash
+# Add repository and install
+curl -fsSL https://akarasulu.github.io/zfs-helper/apt/repo-setup.sh | sudo bash
+sudo apt update
+sudo apt install zfs-helper zfs-helper-client
+
+# Add user to group and configure policies
+sudo usermod -aG zfshelper $USER
+# Create policy files under /etc/zfs-helper/policy.d/$USER/
+# See Installation documentation for details
+```
+
+### Manual Installation
 
 ```bash
 # Unpack
@@ -86,7 +102,7 @@ Per-user policy lives under: `/etc/zfs-helper/policy.d/<username>/`
 - `apply-delegation.py` reads the policy tree and applies corresponding `zfs allow` and `zfs unallow` rules so that OpenZFS delegation mirrors the helper’s policy (run as root).
 - Use `--dry-run` to inspect the changes without executing them:
   ```bash
-  sudo sbin/apply-delegation.py --dry-run
+  sudo /usr/sbin/apply-delegation.py --dry-run
   ```
 - The script manages a focused set of permissions (`mount`, `snapshot`, `rollback`, `create`, `destroy`, `rename`, selected properties, and - where supported - `share`). Operations that OpenZFS refuses to delegate are skipped but reported.
 - Trigger it manually after policy edits or wire it into an automated workflow; avoid running it for datasets that do not yet exist, as wildcards resolve only to present names.

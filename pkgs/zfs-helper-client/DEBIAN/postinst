@@ -1,0 +1,36 @@
+#!/bin/bash
+set -e
+
+# postinst script for zfs-helper-client
+# see: dh_installdeb(1)
+
+case "$1" in
+    configure)
+        echo "zfs-helper-client installed successfully."
+        echo ""
+        echo "Usage: zfs-helperctl <action> <target>"
+        echo "Example: zfs-helperctl snapshot tank/home/\$USER@backup"
+        echo ""
+        echo "Prerequisites:"
+        echo "  - User must be member of 'zfshelper' group"
+        echo "  - Must run from systemd user service"
+        echo "  - zfs-helper daemon must be running"
+        echo ""
+        echo "Examples and documentation:"
+        echo "  /usr/share/doc/zfs-helper-client/examples/"
+        echo ""
+        echo "See zfs-helperctl(1) for complete documentation."
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

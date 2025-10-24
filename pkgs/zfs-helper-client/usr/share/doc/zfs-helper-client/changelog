@@ -1,0 +1,8 @@
+zfs-helper-client (1.0.0) stable; urgency=low
+
+  * Initial Debian package release
+  * Client tools for ZFS delegation helper
+  * zfs-helperctl command-line interface
+  * Example systemd user service templates
+
+ -- Alex Karasulu <akarasulu@apache.org>  Thu, 24 Oct 2025 12:00:00 +0000

@@ -1,0 +1,6 @@
+[Unit]
+Description=Snapshot before job %i
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'zfs-helperctl snapshot tank/home/${USER}@%i'

@@ -52,7 +52,7 @@ if ! command -v /usr/sbin/zfs >/dev/null 2>&1; then
 fi
 
 DAEMON_SRC="$(dirname "$0")/sbin/zfs-helper.py"
-CLI_SRC="$(dirname "$0")/bin/zfs-helperctl"
+CLI_SRC="$(dirname "$0")/pkgs/zfs-helper-client/usr/bin/zfs-helperctl"
 SOCKET_UNIT_SRC="$(dirname "$0")/systemd/zfs-helper.socket"
 SERVICE_UNIT_SRC="$(dirname "$0")/systemd/zfs-helper.service"
 

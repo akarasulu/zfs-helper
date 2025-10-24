@@ -1,0 +1,18 @@
+Package: zfs-helper-client
+Version: 1.0.0
+Section: admin
+Priority: optional
+Architecture: all
+Depends: bash (>= 4.0), jq, socat
+Recommends: zfs-helper
+Maintainer: Alex Karasulu <akarasulu@apache.org>
+Description: Client tools for ZFS delegation helper
+ Client-side utilities for the zfs-helper system that allows unprivileged
+ systemd user-scoped services to perform secure ZFS operations.
+ .
+ This package contains the zfs-helperctl command-line tool that communicates
+ with the zfs-helper daemon to request ZFS operations, along with example
+ user service templates and comprehensive documentation.
+ .
+ Install this package on systems where users need to perform ZFS operations
+ through the zfs-helper delegation system.

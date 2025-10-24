@@ -1,0 +1,105 @@
+.TH ZFS-HELPERCTL 1 "October 2024" "zfs-helper-client 1.0.0" "User Commands"
+.SH NAME
+zfs-helperctl \- client tool for ZFS delegation helper
+.SH SYNOPSIS
+.B zfs-helperctl
+.I action
+.I target
+.RB [ \-\-json
+.RI ' {...} ']
+.SH DESCRIPTION
+.B zfs-helperctl
+is a client command-line tool that communicates with the zfs-helper daemon to request ZFS operations on behalf of unprivileged systemd user-scoped services.
+
+The tool connects to the zfs-helper daemon via a UNIX domain socket and sends JSON-formatted requests for various ZFS operations. All operations are subject to policy enforcement by the daemon.
+.SH ACTIONS
+.TP
+.BI snapshot " dataset@snapname"
+Create a snapshot of the specified dataset.
+.TP
+.BI mount " dataset"
+Mount the specified dataset.
+.TP
+.BI unmount " dataset"
+Unmount the specified dataset.
+.TP
+.BI rollback " dataset@snapname"
+Rollback the dataset to the specified snapshot.
+.TP
+.BI create " dataset"
+Create a new ZFS dataset.
+.TP
+.BI destroy " dataset"
+Destroy the specified dataset or snapshot.
+.TP
+.BI rename " from" " to"
+Rename a dataset from one name to another.
+.TP
+.BI setprop " dataset" " key" " value"
+Set a property on the specified dataset. Supported properties are limited by policy (typically mountpoint, canmount, sharenfs).
+.TP
+.BI share " dataset"
+Share the specified dataset (functionality may be limited).
+.SH OPTIONS
+.TP
+.BI \-\-json " {...}"
+Provide additional JSON parameters for the request.
+.SH EXAMPLES
+.EX
+# Create a snapshot before an upgrade
+zfs-helperctl snapshot tank/home/vagrant@pre-upgrade
+
+# Mount a dataset
+zfs-helperctl mount tank/home/vagrant
+
+# Set canmount property
+zfs-helperctl setprop tank/home/vagrant canmount on
+
+# Create a new dataset
+zfs-helperctl create tank/scratch/temp
+
+# Rollback to a previous snapshot
+zfs-helperctl rollback tank/home/vagrant@pre-upgrade
+
+# Rename a dataset
+zfs-helperctl rename tank/data/tmp-project tank/data/archive/old-project
+.EE
+.SH ENVIRONMENT
+.TP
+.B ZFS_HELPER_SOCK
+Override the default socket path (/run/zfs-helper.sock).
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+General error
+.TP
+.B 2
+Usage error (missing or invalid arguments)
+.SH PREREQUISITES
+.IP \(bu 2
+The user must be a member of the 'zfshelper' group
+.IP \(bu 2
+The user must be running from a systemd user-scoped service
+.IP \(bu 2
+The requested operation and dataset must be allowed by the user's policy configuration
+.IP \(bu 2
+The zfs-helper daemon must be running and accessible
+.SH FILES
+.TP
+.B /run/zfs-helper.sock
+Default UNIX domain socket for communication with the daemon
+.TP
+.B /usr/share/doc/zfs-helper-client/examples/
+Example systemd user service files demonstrating usage
+.SH SEE ALSO
+.BR zfs-helper (8),
+.BR apply-delegation.py (8),
+.BR zfs (8),
+.BR systemd (1)
+.SH AUTHORS
+Alex Karasulu <akarasulu@apache.org>
+.SH LICENSE
+Apache Software License 2.0

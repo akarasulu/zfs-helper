@@ -1,0 +1,43 @@
+#!/bin/bash
+set -e
+
+# postrm script for zfs-helper
+# see: dh_installdeb(1)
+
+case "$1" in
+    purge)
+        # Remove configuration directory on purge
+        if [ -d /etc/zfs-helper ]; then
+            rm -rf /etc/zfs-helper || true
+        fi
+        
+        # Remove the zfshelper group if no users are in it
+        if getent group zfshelper >/dev/null 2>&1; then
+            # Check if any users are in the group
+            if ! getent group zfshelper | cut -d: -f4 | grep -q .; then
+                delgroup zfshelper >/dev/null 2>&1 || true
+            fi
+        fi
+        
+        # Reload systemd
+        if [ -x /bin/systemctl ]; then
+            systemctl daemon-reload >/dev/null 2>&1 || true
+        fi
+        ;;
+
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        # Reload systemd on any removal/upgrade
+        if [ -x /bin/systemctl ]; then
+            systemctl daemon-reload >/dev/null 2>&1 || true
+        fi
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

@@ -1,0 +1,95 @@
+.TH ZFS-HELPER 8 "October 2024" "zfs-helper 1.0.0" "System Administration"
+.SH NAME
+zfs-helper \- ZFS delegation helper daemon for secure unprivileged ZFS operations
+.SH SYNOPSIS
+.B /usr/sbin/zfs-helper.py
+.SH DESCRIPTION
+.B zfs-helper
+is a privileged systemd daemon that allows unprivileged systemd user-scoped services to securely request ZFS operations (mount, snapshot, rollback, create, destroy, rename, setprop, and share) on specific datasets and snapshots via a socket-activated helper daemon.
+
+The daemon follows a fine-grained user, operation, and delegate service policy with comprehensive audit logging. It securely overcomes delegation limitations resulting from ZFS ports to Linux, enabling the full gambit of ZFS features like delegated mounting, zero cost snapshots and rollback for controlling and managing service storage volumes.
+
+This is especially useful for container engines like Podman and its volume Quadlets to maintain data integrity across reboots and abrupt shutdowns.
+.SH FEATURES
+.IP \(bu 2
+AF_UNIX + SO_PEERCRED: kernel-authenticated peer PID/UID/GID
+.IP \(bu 2
+Enforces user-service origin (systemd user cgroup check)
+.IP \(bu 2
+Requires callers to belong to the 'zfshelper' group
+.IP \(bu 2
+Per-user authorized unit allowlist (glob patterns supported)
+.IP \(bu 2
+Per-action dataset allowlists keyed by '<user> <glob>' entries with gitignore-style wildcards (*, ?, **)
+.IP \(bu 2
+Automatic ownership harmonisation: dataset creates/renames and snapshot creates chown mount trees to the caller's UID + primary GID
+.IP \(bu 2
+Clear structured journald logs with ALLOW/DENY/ERROR reasons in JSON format
+.SH SOCKET
+The daemon listens on
+.B /run/zfs-helper.sock
+which is owned by root:zfshelper with mode 0660. Only members of the zfshelper group can connect to the socket.
+.SH POLICY DIRECTORY
+Per-user policy configuration is stored under
+.B /etc/zfs-helper/policy.d/<username>/
+
+Policy files include:
+.TP
+.B units.list
+Glob list of allowed user unit names (backup@*.service, sync.service, ...)
+.TP
+.B mount.list, unmount.list, snapshot.list, rollback.list, create.list, destroy.list, rename.from.list, rename.to.list, share.list, setprop.list
+Dataset-scoped lists expecting one entry per line in the form:
+.br
+<user> <dataset-glob>
+.br
+Use the literal username or '*' for any zfshelper member. Globs follow gitignore rules ('*' within a segment, '**' across segments).
+.TP
+.B setprop.values.list
+Value constraints for setprop operations, e.g.:
+.br
+canmount=on
+.br
+canmount=noauto
+.br
+sharenfs=off
+.br
+mountpoint:/home/alex*
+.SH SECURITY
+.IP \(bu 2
+The daemon runs as root but is hardened with systemd sandboxing and a minimal CapabilityBoundingSet
+.IP \(bu 2
+Every request must pass: socket group membership, kernel-provided creds (SO_PEERCRED), systemd user-service origin check, authorized unit name check, per-action dataset whitelist, and per-user dataset ownership checks
+.IP \(bu 2
+Root callers are rejected
+.IP \(bu 2
+All denials and errors are logged with structured details for auditing
+.SH FILES
+.TP
+.B /usr/sbin/zfs-helper.py
+Main daemon executable
+.TP
+.B /usr/sbin/apply-delegation.py
+Policy synchronization tool for ZFS delegation
+.TP
+.B /etc/zfs-helper/policy.d/
+Per-user policy configuration directory
+.TP
+.B /run/zfs-helper.sock
+UNIX domain socket for client communication
+.TP
+.B /lib/systemd/system/zfs-helper.socket
+.TQ
+.B /lib/systemd/system/zfs-helper.service
+Systemd unit files
+.SH SEE ALSO
+.BR zfs-helperctl (1),
+.BR apply-delegation.py (8),
+.BR zfs (8),
+.BR systemd (1),
+.BR systemd.socket (5),
+.BR systemd.service (5)
+.SH AUTHORS
+Alex Karasulu <akarasulu@apache.org>
+.SH LICENSE
+Apache Software License 2.0

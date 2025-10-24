@@ -1,0 +1,9 @@
+zfs-helper (1.0.0) stable; urgency=low
+
+  * Initial Debian package release
+  * ZFS delegation helper daemon for secure unprivileged operations
+  * Supports mount, unmount, snapshot, rollback, create, destroy, rename, setprop
+  * Policy-based authorization with comprehensive audit logging
+  * Systemd socket activation with security hardening
+
+ -- Alex Karasulu <akarasulu@apache.org>  Thu, 24 Oct 2025 12:00:00 +0000

@@ -1,0 +1,10 @@
+zfs-helper (1.0.0) stable; urgency=low
+
+  * Initial Debian package release
+  * Privileged ZFS delegation helper daemon
+  * Secure socket-based communication
+  * Fine-grained policy enforcement
+  * Comprehensive audit logging
+  * Systemd integration with hardening
+
+ -- Alex Karasulu <akarasulu@apache.org>  Thu, 24 Oct 2024 12:00:00 +0000

@@ -1,0 +1,21 @@
+Package: zfs-helper
+Version: 1.0.0
+Section: admin
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.7), systemd (>= 240), zfsutils-linux, adduser
+Recommends: zfs-helper-client
+Maintainer: Alex Karasulu <akarasulu@apache.org>
+Description: ZFS delegation helper daemon for secure unprivileged ZFS operations
+ A Linux OpenZFS delegation helper service that allows unprivileged systemd
+ user-scoped services to securely request ZFS operations (mount, snapshot,
+ rollback, create, destroy, rename, setprop, and share) on specific datasets
+ and snapshots via a privileged socket-activated helper daemon.
+ .
+ The privileged gateway service securely overcomes delegation limitations
+ resulting from ZFS ports to Linux. It follows a fine-grained user, operation,
+ and delegate service policy with comprehensive audit logging.
+ .
+ This package contains the core daemon and systemd units that run with
+ root privileges to perform ZFS operations on behalf of authorized
+ unprivileged services.

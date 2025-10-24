@@ -1,0 +1,37 @@
+.TH APPLY-DELEGATION.PY 8 "October 2024" "zfs-helper 1.0.0" "System Administration"
+.SH NAME
+apply-delegation.py \- synchronize zfs-helper policies with ZFS delegation permissions
+.SH SYNOPSIS
+.B /usr/sbin/apply-delegation.py
+.RB [ \-\-dry\-run ]
+.SH DESCRIPTION
+.B apply-delegation.py
+reads the zfs-helper policy tree and applies corresponding 'zfs allow' and 'zfs unallow' rules so that OpenZFS delegation mirrors the helper's policy. This tool must be run as root.
+
+The script manages a focused set of permissions (mount, snapshot, rollback, create, destroy, rename, selected properties, and - where supported - share). Operations that OpenZFS refuses to delegate are skipped but reported.
+.SH OPTIONS
+.TP
+.B \-\-dry\-run
+Inspect the changes without executing them. Shows what would be applied without making actual changes to ZFS permissions.
+.SH USAGE
+Run manually after policy edits or wire it into an automated workflow. Avoid running it for datasets that do not yet exist, as wildcards resolve only to present names.
+
+.EX
+# Apply delegation changes
+sudo /usr/sbin/apply-delegation.py
+
+# Preview changes without applying them
+sudo /usr/sbin/apply-delegation.py --dry-run
+.EE
+.SH FILES
+.TP
+.B /etc/zfs-helper/policy.d/
+Policy configuration directory that this tool reads
+.SH SEE ALSO
+.BR zfs-helper (8),
+.BR zfs-helperctl (1),
+.BR zfs (8)
+.SH AUTHORS
+Alex Karasulu <akarasulu@apache.org>
+.SH LICENSE
+Apache Software License 2.0

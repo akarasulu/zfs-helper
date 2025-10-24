@@ -1,0 +1,14 @@
+[Unit]
+Description=ZFS Helper Socket
+Documentation=man:zfs-helper(8) man:systemd.socket(5)
+
+[Socket]
+ListenStream=/run/zfs-helper.sock
+SocketMode=0660
+SocketUser=root
+SocketGroup=zfshelper
+Backlog=16
+RemoveOnStop=yes
+
+[Install]
+WantedBy=sockets.target
