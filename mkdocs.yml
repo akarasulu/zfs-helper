@@ -1,86 +1,19 @@
 docs_dir: mkdocs
 site_dir: docs
-site_name: "Zfs Helper"
-site_description: GitHub Pages as APT repositories with automated package management
-site_author: Alex O. Karasulu
-copyright: Copyright &copy; 2025 Alex O. Karasulu
-repo_url: https://github.com/akarasulu/zfs-helper
+site_name: zfs-helper
+site_description: Privileged helper for tightly controlled ZFS operations
+repo_url: https://github.com/<your-username>/zfs-helper
 repo_name: zfs-helper
 nav:
   - Home: index.md
-  - Quickstart: quickstart.md
-  - User Guide:
-    - Getting Started: usage.md
-    - Customization: customize.md
-  - Developer Guide:
-    - Design & Architecture: design.md
-    - Build Process: build.md
-  - Project:
-    - Releases: releases.md
+  - Installation: installation.md
+  - Policy: policy.md
+  - Release: release.md
 theme:
   name: material
   palette:
-    # Palette toggle for light mode
-    - scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    # Palette toggle for dark mode
-    - scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
-  features:
-    - navigation.tabs
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - navigation.instant
-    - navigation.tracking
-    - navigation.indexes
-    - search.highlight
-    - search.share
-    - search.suggest
-    - content.code.copy
-    - content.code.annotate
-  icon:
-    repo: fontawesome/brands/github
-
+    primary: indigo
+    accent: indigo
 markdown_extensions:
   - toc:
       permalink: true
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-
-plugins:
-  - search
-
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/akarasulu/zfs-helper
-      name: Source Code
-    - icon: fontawesome/solid/book
-      link: https://akarasulu.github.io/zfs-helper/
-      name: Documentation
-  version:
-    provider: mike
-  generator: false

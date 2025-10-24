@@ -1,0 +1,79 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+#  config.vm.box = "cloud-image/debian-13"
+#  config.vm.box = "generic/debian12"
+  config.vm.box = "deb12-zfs"
+
+  config.vm.provision "shell", privileged: true, inline: <<-SHELL
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    sudo sed -i 's|http://deb.debian.org/debian|http://ftp.tr.debian.org/debian|g' /etc/apt/sources.list
+
+    sudo apt-get update -y
+    sudo DEBIAN_FRONTEND=noninteractive apt autoremove -y 
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y socat jq
+
+    sudo zpool create testing raidz1 /dev/vdb /dev/vdc /dev/vdd
+    sudo zpool status
+    sudo zpool list
+    sudo mkdir /var/lib/containers
+    sudo zfs create testing/var
+    sudo zfs create testing/var/lib
+    sudo zfs create testing/var/lib/containers
+    sudo zfs create testing/var/lib/containers/privileged
+    sudo zfs create testing/var/lib/containers/unprivileged
+    sudo zfs set mountpoint=/var/lib/containers testing/var/lib/containers
+
+    sudo zfs create testing/var/lib/containers/unprivileged/delegation-test
+    sudo chown -R vagrant:vagrant /var/lib/containers/unprivileged/delegation-test
+    sudo zfs allow vagrant \
+      create,mount,mountpoint,canmount,snapshot,rollback,clone,destroy \
+      testing/var/lib/containers/unprivileged/delegation-test
+
+  SHELL
+
+  config.vm.synced_folder ".", "/zfs-helper",
+    type: "rsync",
+    create: true,
+    owner: 1001,
+    group: 1001,
+    rsync__chown: true,
+    rsync__auto: false,
+    rsync__args: [
+      "--verbose",
+      "--archive",
+    ],
+    rsync__exclude: [
+      ".git",
+      ".vagrant"
+    ]
+
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.memory = 4096
+    libvirt.cpus   = 4
+
+    # Extra disk #1 – 1 GB
+    libvirt.storage :file,
+      :size => '1G',
+      :type => 'qcow2',
+      :bus => 'virtio'
+
+    # Extra disk #2 – 1 GB
+    libvirt.storage :file,
+      :size => '1G',
+      :type => 'qcow2',
+      :bus => 'virtio'
+
+    # Extra disk #3 – 1 GB
+    libvirt.storage :file,
+      :size => '1G',
+      :type => 'qcow2',
+      :bus => 'virtio'
+  end
+
+  config.vm.provider :vmware_desktop do |vmware|
+    vmware.vmx["memsize"] = "4096"
+    vmware.vmx["numvcpus"] = "4"
+  end
+end

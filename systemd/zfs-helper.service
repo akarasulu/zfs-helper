@@ -1,0 +1,29 @@
+[Unit]
+Description=ZFS Helper Daemon (service-only, policy-enforced ZFS ops)
+Documentation=man:systemd.service(5)
+After=local-fs.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/zfs-helper.py
+User=root
+Group=root
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ReadWritePaths=/run /etc/zfs-helper
+AmbientCapabilities=
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_DAC_READ_SEARCH
+LockPersonality=yes
+RestrictRealtime=yes
+SystemCallArchitectures=native
+SystemCallFilter=@mount @basic-io @file-system @system-service
+
+[Install]
+WantedBy=multi-user.target
+Also=zfs-helper.socket

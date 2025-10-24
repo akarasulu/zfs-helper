@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SOCK="${ZFS_HELPER_SOCK:-/run/zfs-helper.sock}"
+
+usage() {
+  cat <<USAGE
+Usage:
+  zfs-helperctl <action> <target> [--json '{...}']
+
+Actions:
+  snapshot  <dataset@snapname>
+  mount     <dataset>
+  unmount   <dataset>
+  rollback  <dataset@snapname>
+  create    <dataset>
+  destroy   <dataset>
+  rename    <from> <to>
+  setprop   <dataset> <key> <value>
+  share     <dataset>
+
+Examples:
+  zfs-helperctl snapshot tank/home/vagrant@pre-upgrade
+  zfs-helperctl mount tank/home/vagrant
+  zfs-helperctl setprop tank/home/vagrant canmount on
+USAGE
+}
+
+die() { echo "ERROR: $*" >&2; exit 1; }
+
+need() { command -v "$1" >/dev/null 2>&1 || die "Missing dependency: $1"; }
+
+need jq
+need socat
+
+[[ $# -lt 2 ]] && { usage; exit 2; }
+
+action="$1"; shift
+
+# Build payload based on action & args
+case "$action" in
+  snapshot|mount|unmount|rollback|create|destroy|share)
+    target="${1:-}"; [[ -z "$target" ]] && die "Missing target for $action"
+    payload=$(jq -n --arg action "$action" --arg target "$target" '{action:$action, target:$target}')
+    ;;
+  rename)
+    from="${1:-}"; to="${2:-}"
+    [[ -z "$from" || -z "$to" ]] && die "Usage: zfs-helperctl rename <from> <to>"
+    payload=$(jq -n --arg action "$action" --arg from "$from" --arg to "$to" '{action:$action, from:$from, to:$to}')
+    ;;
+  setprop)
+    dataset="${1:-}"; key="${2:-}"; value="${3:-}"
+    [[ -z "$dataset" || -z "$key" || -z "$value" ]] && die "Usage: zfs-helperctl setprop <dataset> <key> <value>"
+    payload=$(jq -n --arg action "$action" --arg dataset "$dataset" --arg key "$key" --arg value "$value" \
+      '{action:$action, dataset:$dataset, key:$key, value:$value}')
+    ;;
+  --json)
+    # power user path: raw JSON as the remainder of the args
+    shift
+    payload="$*"
+    ;;
+  *)
+    die "Unknown action: $action"
+    ;;
+esac
+
+# Send JSON to the daemon over the UNIX socket
+# - 'socat -t 15' gives a 15s I/O timeout to avoid hangs.
+response=$(printf '%s' "$payload" | socat -t 15 - UNIX-CONNECT:"$SOCK") || {
+  rc=$?
+  echo "Daemon/socket call failed (rc=$rc). Socket: $SOCK" >&2
+  exit $rc
+}
+
+# Print raw JSON response
+echo "$response"
+
+# Optional: treat non-OK status as error exit
+status=$(jq -r '.status // empty' <<<"$response")
+if [[ -n "$status" && "$status" != "OK" ]]; then
+  exit 1
+fi
+
