@@ -17,10 +17,10 @@ Description: Client tools for ZFS delegation helper
  Install this package on systems where users need to perform ZFS operations
  through the zfs-helper delegation system.
 Filename: pool/zfs-helper-client_1.0.0_all.deb
-Size: 5044
-MD5sum: b0eace7160ec912b86e8a9f89907a9b6
-SHA1: c8b5b6c7689c17c1e54529d6a30615fc5ffdbd15
-SHA256: 951dfffef996f605210ef84eedafd49cd1cd2497d39ff5b31dfcff52af0a3598
+Size: 5048
+MD5sum: 56935cbd84dbda383ff3035811bd5ba8
+SHA1: c989cb883738cc7abbeef17c0a1688455ca2b7d0
+SHA256: a2b308a5e72fc98271740396e89987b1d26cdea547e96dcef5e6d9b2a4d108b7
 
 Package: zfs-helper
 Version: 1.0.0
@@ -45,7 +45,7 @@ Description: ZFS delegation helper daemon for secure unprivileged ZFS operations
  unprivileged services.
 Filename: pool/zfs-helper_1.0.0_all.deb
 Size: 12924
-MD5sum: bc4c49d38ae884d418afaa236eeaf6bf
-SHA1: 35d5eaaef1c62aa00d8ee39284f5d7e9a8aded5d
-SHA256: a57b7a8082de9905c780539c1858b9a6ed09f1e55a504587aa83c6acfff21e07
+MD5sum: 6a3c18d62d9e0a65d7d6d1ea8e5ed42a
+SHA1: 823901a597c8658a80ee3791c0da9c218a64dea7
+SHA256: c49f3dc19064852366ef12d0469dc3be7843a385fa87a1653691292d06f66433
 
