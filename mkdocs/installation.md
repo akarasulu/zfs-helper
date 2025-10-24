@@ -1,7 +1,5 @@
 # Installation
 
-# Installation
-
 ZFS Helper can be installed using Debian packages or from source. The Debian package method is recommended for most users.
 
 ## Prerequisites
@@ -30,6 +28,25 @@ sudo apt install zfs-helper zfs-helper-client
 This installs:
 - `zfs-helper`: Core daemon and systemd units
 - `zfs-helper-client`: Client tools (`zfs-helperctl`) and examples
+
+If you try to install the package and get this error then you need to install ZFS and its utilities first:
+
+```bash
+vagrant@debian12:~$ sudo apt-get install zfs-helper
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+ zfs-helper : Depends: zfsutils-linux but it is not installable
+              Recommends: zfs-helper-client but it is not going to be installed
+E: Unable to correct problems, you have held broken packages.
+```
 
 ### Verification
 

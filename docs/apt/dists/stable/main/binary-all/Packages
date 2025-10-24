@@ -16,10 +16,10 @@ Description: Collection of development utility scripts
  - Shared data files installation
  - Multiple utility scripts in one package
 Filename: pool/dev-tools_1.5.2_all.deb
-Size: 4304
-MD5sum: 02f5a0ea7770b38746285e364a2d92ba
-SHA1: bc4f5b6704c2fed75540d469e5576ad9f632aba7
-SHA256: 6e1e2246f9a26c55ae11db0977afbc0e98e7690c7aeccfb5dd24418999a25842
+Size: 4300
+MD5sum: 89f683f99bffee9e98833bf9b8380f64
+SHA1: 6f8c5851fb9970a1a78f950891c05ba38ee6eb85
+SHA256: e06651297a0c60d74cfa9d9c3e8f5c6202886dcd3cd5527fa5bbbce81df08ec4
 
 Package: hello-world
 Version: 1.0.0
@@ -35,9 +35,9 @@ Description: Simple hello world utility
  a greeting message to the terminal.
 Filename: pool/hello-world_1.0.0_all.deb
 Size: 992
-MD5sum: fe7d785c85d22af828519b406661957b
-SHA1: 5776466722ae16436c6fbe2d5cc2007c42e4b66e
-SHA256: c6726eeef0bb3c940088e7ce7d31ec39b39467eeb81275147a12a1d72ae682a9
+MD5sum: 74bb8e4435afb84a04caeae9ead59a25
+SHA1: 642c9f1888dfe5ef5dfde37d8bf089a5974a716b
+SHA256: 2451681a315fcfc02f95c3090638e7931b615f5eedc7569371b128a3eeefdf07
 
 Package: mock-monitor
 Version: 2.1.3
@@ -56,10 +56,10 @@ Description: Mock system monitoring service
  - Create log directories and manage permissions
  - Integrate with system service management
 Filename: pool/mock-monitor_2.1.3_all.deb
-Size: 2368
-MD5sum: 49ff176d42f21624203ef5fbac48c3cd
-SHA1: 5d621a33a2e20bfc0af8d8f3bbfa9e20c165a173
-SHA256: 981be2c811bd7258232264103c31955bc22977fa183a1d406a47169ba0dfdd96
+Size: 2364
+MD5sum: c8220a73e0f9cfeeaca73ca47b7135f0
+SHA1: 1a720d9202295807e1b69d95eae10133729939bc
+SHA256: a18d89f162dfb2f4207aff229c60d7d99859bc7f355b27afb94561f084a197f4
 
 Package: zfs-helper-client
 Version: 1.0.0
@@ -80,10 +80,10 @@ Description: Client tools for ZFS delegation helper
  Install this package on systems where users need to perform ZFS operations
  through the zfs-helper delegation system.
 Filename: pool/zfs-helper-client_1.0.0_all.deb
-Size: 5052
-MD5sum: 9fa57d4dbbb474143ed12f3b00f85d44
-SHA1: f24c9543fa0dd687bec0179e85917f53f9e5126e
-SHA256: 8296bced3e70550f160ce70e9fcf1c1812e4246f58ce9a73ae8d0d1b4a43dcd2
+Size: 5048
+MD5sum: ac6f2b918d175b2cfb8f1e54abeb027c
+SHA1: fc5cdced32e180787d5a0cc088f8ac1b597749b2
+SHA256: c4eb176593eca3ad10ade7f14965fa945fbadcda5215403cf192b2ba8faace1e
 
 Package: zfs-helper
 Version: 1.0.0
@@ -107,8 +107,8 @@ Description: ZFS delegation helper daemon for secure unprivileged ZFS operations
  root privileges to perform ZFS operations on behalf of authorized
  unprivileged services.
 Filename: pool/zfs-helper_1.0.0_all.deb
-Size: 12916
-MD5sum: d8be1a5545ef086049e6c8588a654717
-SHA1: da8dea35908f2c9d0e14da346b2ecaddeed14c7e
-SHA256: 40595496db04b8998013b346112c76775f11eda7e83f4cd1722cc1ae30c20f13
+Size: 12920
+MD5sum: f2fed1aeed8c327ed7d8e6108dfebb9c
+SHA1: c1c5e34ac22905914f2d74ad8d6226424781378c
+SHA256: 5c2066b818ea25780ee3b3c0e090b6d781e6127388d3a3300ddcc47c2cb6bba9
 

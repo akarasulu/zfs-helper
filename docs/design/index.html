@@ -1893,84 +1893,82 @@
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <p><code>zfs-helper</code> is a privileged UNIX-domain socket daemon that executes a constrained set of <code>zfs(8)</code> operations on behalf of unprivileged systemd user services. Access is governed by per-user policy files stored under <code>/etc/zfs-helper/policy.d/&lt;user&gt;/</code>, allowing fine-grained control over datasets, snapshots, and property mutations. Requests are expressed as single-line JSON payloads; responses echo a JSON object containing a status code and informational string.</p>
 <h2 id="high-level-architecture">High-Level Architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TD
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    A[&quot;User Service&lt;br/&gt;(unit@UID.service)&quot;] --&gt;|JSON over Unix socket| B[&quot;zfs-helper daemon&quot;]
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    B --&gt; C[&quot;Policy Loader&lt;br/&gt;(/etc/zfs-helper/policy.d)&quot;]
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    B --&gt; D[&quot;Action Dispatchers&lt;br/&gt;handle_* handlers&quot;]
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    D --&gt;|Subprocess| E[&quot;zfs(8)&quot;]
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    E --&gt; D
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    D --&gt;|Status + info| A
-</code></pre></div>
+<pre class="mermaid"><code>graph TD
+    A["User Service&lt;br/&gt;(unit@UID.service)"] --&gt;|JSON over Unix socket| B["zfs-helper daemon"]
+    B --&gt; C["Policy Loader&lt;br/&gt;(/etc/zfs-helper/policy.d)"]
+    B --&gt; D["Action Dispatchers&lt;br/&gt;handle_* handlers"]
+    D --&gt;|Subprocess| E["zfs(8)"]
+    E --&gt; D
+    D --&gt;|Status + info| A</code></pre>
 <h2 id="system-overview">System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─────────────────────────────────────────────────────────────────┐
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│                    User Space (Unprivileged)                    │
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├─────────────────────────────────────────────────────────────────┤
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│  ┌─────────────────┐    ┌──────────────────────────────────────┐ │
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│  │ User Services   │    │ User Applications                    │ │
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│  │ - backup@.srv   │    │ - Container engines                  │ │
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│  │ - container@.srv│    │ - Backup scripts                     │ │
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│  │ - dev-env.srv   │    │ - Development tools                  │ │
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│  └─────────────────┘    └──────────────────────────────────────┘ │
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│           │                               │                      │
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│           └───────────────┬───────────────┘                      │
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│                           │                                      │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│                  ┌────────▼────────┐                             │
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│                  │ zfs-helperctl   │                             │
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│                  │ (Client Tool)   │                             │
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│                  └────────┬────────┘                             │
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>├───────────────────────────┼─────────────────────────────────────┤
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│                           │                                      │
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│              ┌────────────▼────────────┐                         │
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│              │    UNIX Socket          │                         │
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│              │ /run/zfs-helper.sock    │                         │
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│              │   (root:zfshelper)      │                         │
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│              └────────────┬────────────┘                         │
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>├───────────────────────────┼─────────────────────────────────────┤
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>│                    Root Space (Privileged)                      │
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>├───────────────────────────┼─────────────────────────────────────┤
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>│              ┌────────────▼────────────┐                         │
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>│              │   zfs-helper.py         │                         │
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>│              │   (Daemon)              │                         │
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>│              │                         │                         │
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>│              │ ┌─────────────────────┐ │                         │
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>│              │ │ Policy Engine       │ │                         │
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>│              │ │ - User validation   │ │                         │
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>│              │ │ - Service validation│ │                         │
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>│              │ │ - Dataset validation│ │                         │
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>│              │ └─────────────────────┘ │                         │
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>│              │                         │                         │
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>│              │ ┌─────────────────────┐ │                         │
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>│              │ │ ZFS Interface       │ │                         │
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>│              │ │ - Command execution │ │                         │
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>│              │ │ - Error handling    │ │                         │
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>│              │ │ - Ownership mgmt    │ │                         │
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>│              │ └─────────────────────┘ │                         │
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>│              └────────────┬────────────┘                         │
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>│                           │                                      │
-<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>│                  ┌────────▼────────┐                             │
-<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>│                  │   ZFS Kernel    │                             │
-<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>│                  │   Module        │                             │
-<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>│                  └─────────────────┘                             │
-<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>└─────────────────────────────────────────────────────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                    User Space (Unprivileged)                    │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├─────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  ┌─────────────────┐    ┌──────────────────────────────────────┐ │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  │ User Services   │    │ User Applications                    │ │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  │ - backup@.srv   │    │ - Container engines                  │ │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│  │ - container@.srv│    │ - Backup scripts                     │ │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  │ - dev-env.srv   │    │ - Development tools                  │ │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│  └─────────────────┘    └──────────────────────────────────────┘ │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│           │                               │                      │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│           └───────────────┬───────────────┘                      │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│                           │                                      │
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│                  ┌────────▼────────┐                             │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│                  │ zfs-helperctl   │                             │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│                  │ (Client Tool)   │                             │
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│                  └────────┬────────┘                             │
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>├───────────────────────────┼─────────────────────────────────────┤
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│                           │                                      │
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│              ┌────────────▼────────────┐                         │
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│              │    UNIX Socket          │                         │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│              │ /run/zfs-helper.sock    │                         │
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│              │   (root:zfshelper)      │                         │
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│              └────────────┬────────────┘                         │
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>├───────────────────────────┼─────────────────────────────────────┤
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│                    Root Space (Privileged)                      │
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>├───────────────────────────┼─────────────────────────────────────┤
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│              ┌────────────▼────────────┐                         │
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│              │   zfs-helper.py         │                         │
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│              │   (Daemon)              │                         │
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│              │                         │                         │
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│              │ ┌─────────────────────┐ │                         │
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│              │ │ Policy Engine       │ │                         │
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│              │ │ - User validation   │ │                         │
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│              │ │ - Service validation│ │                         │
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│              │ │ - Dataset validation│ │                         │
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│              │ └─────────────────────┘ │                         │
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│              │                         │                         │
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>│              │ ┌─────────────────────┐ │                         │
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>│              │ │ ZFS Interface       │ │                         │
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>│              │ │ - Command execution │ │                         │
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│              │ │ - Error handling    │ │                         │
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│              │ │ - Ownership mgmt    │ │                         │
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│              │ └─────────────────────┘ │                         │
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│              └────────────┬────────────┘                         │
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│                           │                                      │
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>│                  ┌────────▼────────┐                             │
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>│                  │   ZFS Kernel    │                             │
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>│                  │   Module        │                             │
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│                  └─────────────────┘                             │
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>└─────────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <h2 id="request-lifecycle">Request Lifecycle<a class="headerlink" href="#request-lifecycle" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sequenceDiagram
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    participant Service as User Service
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    participant Socket as /run/zfs-helper.sock
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    participant Helper as zfs-helper
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    participant ZFS as /usr/sbin/zfs
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    Service-&gt;&gt;Socket: connect()
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    Service-&gt;&gt;Helper: send JSON payload
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    Helper-&gt;&gt;Helper: read_peer_ucred()
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    Helper-&gt;&gt;Helper: validate_request()
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    Helper-&gt;&gt;Helper: load_policy()
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    Helper-&gt;&gt;Helper: handle_action()
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    Helper-&gt;&gt;ZFS: subprocess.run([zfs, ...])
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    ZFS--&gt;&gt;Helper: stdout/stderr + return code
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    Helper--&gt;&gt;Service: JSON status response
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    Service-&gt;&gt;Socket: close()
-</code></pre></div>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Service as User Service
+    participant Socket as /run/zfs-helper.sock
+    participant Helper as zfs-helper
+    participant ZFS as /usr/sbin/zfs
+
+    Service-&gt;&gt;Socket: connect()
+    Service-&gt;&gt;Helper: send JSON payload
+    Helper-&gt;&gt;Helper: read_peer_ucred()
+    Helper-&gt;&gt;Helper: validate_request()
+    Helper-&gt;&gt;Helper: load_policy()
+    Helper-&gt;&gt;Helper: handle_action()
+    Helper-&gt;&gt;ZFS: subprocess.run([zfs, ...])
+    ZFS--&gt;&gt;Helper: stdout/stderr + return code
+    Helper--&gt;&gt;Service: JSON status response
+    Service-&gt;&gt;Socket: close()</code></pre>
 <h2 id="core-components">Core Components<a class="headerlink" href="#core-components" title="Permanent link">&para;</a></h2>
 <h3 id="1-client-tool-zfs-helperctl">1. Client Tool (<code>zfs-helperctl</code>)<a class="headerlink" href="#1-client-tool-zfs-helperctl" title="Permanent link">&para;</a></h3>
 <p><strong>Purpose</strong>: User-space interface for requesting ZFS operations
@@ -1990,25 +1988,25 @@
 <strong>Language</strong>: Python 3
 <strong>Location</strong>: <code>/usr/sbin/zfs-helper.py</code></p>
 <p><strong>Architecture</strong>:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="err">┌─────────────────────────────────────────────────────────────┐</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="err">│</span>                    <span class="n">zfs</span><span class="o">-</span><span class="n">helper</span><span class="o">.</span><span class="n">py</span>                            <span class="err">│</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="err">├─────────────────────────────────────────────────────────────┤</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="err">│</span> <span class="err">┌─────────────────┐</span>  <span class="err">┌─────────────────┐</span>  <span class="err">┌───────────────┐</span> <span class="err">│</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="err">│</span> <span class="err">│</span> <span class="n">Socket</span> <span class="n">Handler</span>  <span class="err">│</span>  <span class="err">│</span> <span class="n">Auth</span> <span class="n">Engine</span>     <span class="err">│</span>  <span class="err">│</span> <span class="n">ZFS</span> <span class="n">Executor</span>  <span class="err">│</span> <span class="err">│</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Accept</span> <span class="n">conns</span>  <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">SO_PEERCRED</span>   <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Command</span> <span class="n">run</span> <span class="err">│</span> <span class="err">│</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Parse</span> <span class="n">JSON</span>    <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Cgroup</span> <span class="n">check</span>  <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Output</span> <span class="n">parse</span><span class="err">│</span> <span class="err">│</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Validate</span> <span class="n">msgs</span> <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Policy</span> <span class="n">lookup</span> <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Error</span> <span class="n">handle</span><span class="err">│</span> <span class="err">│</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="err">│</span> <span class="err">└─────────────────┘</span>  <span class="err">└─────────────────┘</span>  <span class="err">└───────────────┘</span> <span class="err">│</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="err">│</span>          <span class="err">│</span>                     <span class="err">│</span>                    <span class="err">│</span>       <span class="err">│</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="err">│</span>          <span class="err">└─────────┬───────────┼────────────────────┘</span>       <span class="err">│</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="err">│</span>                    <span class="err">│</span>           <span class="err">│</span>                            <span class="err">│</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="err">│</span> <span class="err">┌─────────────────────────────────────────────────────────┐</span> <span class="err">│</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="err">│</span> <span class="err">│</span>              <span class="n">Logging</span> <span class="o">&amp;</span> <span class="n">Audit</span> <span class="n">Engine</span>                     <span class="err">│</span> <span class="err">│</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Structured</span> <span class="n">JSON</span> <span class="n">logs</span>                                  <span class="err">│</span> <span class="err">│</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">ALLOW</span><span class="o">/</span><span class="n">DENY</span><span class="o">/</span><span class="n">ERROR</span> <span class="n">decisions</span>                            <span class="err">│</span> <span class="err">│</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Performance</span> <span class="n">metrics</span>                                   <span class="err">│</span> <span class="err">│</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="err">│</span> <span class="err">└─────────────────────────────────────────────────────────┘</span> <span class="err">│</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="err">└─────────────────────────────────────────────────────────────┘</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="err">┌─────────────────────────────────────────────────────────────┐</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="err">│</span>                    <span class="n">zfs</span><span class="o">-</span><span class="n">helper</span><span class="o">.</span><span class="n">py</span>                            <span class="err">│</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="err">├─────────────────────────────────────────────────────────────┤</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="err">│</span> <span class="err">┌─────────────────┐</span>  <span class="err">┌─────────────────┐</span>  <span class="err">┌───────────────┐</span> <span class="err">│</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="err">│</span> <span class="err">│</span> <span class="n">Socket</span> <span class="n">Handler</span>  <span class="err">│</span>  <span class="err">│</span> <span class="n">Auth</span> <span class="n">Engine</span>     <span class="err">│</span>  <span class="err">│</span> <span class="n">ZFS</span> <span class="n">Executor</span>  <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Accept</span> <span class="n">conns</span>  <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">SO_PEERCRED</span>   <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Command</span> <span class="n">run</span> <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Parse</span> <span class="n">JSON</span>    <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Cgroup</span> <span class="n">check</span>  <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Output</span> <span class="n">parse</span><span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Validate</span> <span class="n">msgs</span> <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Policy</span> <span class="n">lookup</span> <span class="err">│</span>  <span class="err">│</span> <span class="o">-</span> <span class="n">Error</span> <span class="n">handle</span><span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="err">│</span> <span class="err">└─────────────────┘</span>  <span class="err">└─────────────────┘</span>  <span class="err">└───────────────┘</span> <span class="err">│</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="err">│</span>          <span class="err">│</span>                     <span class="err">│</span>                    <span class="err">│</span>       <span class="err">│</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="err">│</span>          <span class="err">└─────────┬───────────┼────────────────────┘</span>       <span class="err">│</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="err">│</span>                    <span class="err">│</span>           <span class="err">│</span>                            <span class="err">│</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="err">│</span> <span class="err">┌─────────────────────────────────────────────────────────┐</span> <span class="err">│</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="err">│</span> <span class="err">│</span>              <span class="n">Logging</span> <span class="o">&amp;</span> <span class="n">Audit</span> <span class="n">Engine</span>                     <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Structured</span> <span class="n">JSON</span> <span class="n">logs</span>                                  <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">ALLOW</span><span class="o">/</span><span class="n">DENY</span><span class="o">/</span><span class="n">ERROR</span> <span class="n">decisions</span>                            <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="err">│</span> <span class="err">│</span> <span class="o">-</span> <span class="n">Performance</span> <span class="n">metrics</span>                                   <span class="err">│</span> <span class="err">│</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="err">│</span> <span class="err">└─────────────────────────────────────────────────────────┘</span> <span class="err">│</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="err">└─────────────────────────────────────────────────────────────┘</span>
 </code></pre></div></p>
 <h2 id="detailed-behavior">Detailed Behavior<a class="headerlink" href="#detailed-behavior" title="Permanent link">&para;</a></h2>
 <h3 id="socket-management">Socket Management<a class="headerlink" href="#socket-management" title="Permanent link">&para;</a></h3>
@@ -2071,13 +2069,13 @@
 <li><strong>Audit Layer</strong>: Comprehensive logging of all decisions</li>
 </ol>
 <h3 id="trust-boundaries">Trust Boundaries<a class="headerlink" href="#trust-boundaries" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>┌─────────────────┐    Trust    ┌─────────────────┐
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>│   User Space    │─ Boundary ─│   Root Space    │
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│                 │      ↓      │                 │
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│ - User services │     UNIX    │ - zfs-helper    │
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│ - zfs-helperctl │    Socket   │ - Policy files  │
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>│ - Client tools  │             │ - ZFS commands  │
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>└─────────────────┘             └─────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>┌─────────────────┐    Trust    ┌─────────────────┐
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│   User Space    │─ Boundary ─│   Root Space    │
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│                 │      ↓      │                 │
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│ - User services │     UNIX    │ - zfs-helper    │
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│ - zfs-helperctl │    Socket   │ - Policy files  │
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│ - Client tools  │             │ - ZFS commands  │
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└─────────────────┘             └─────────────────┘
 </code></pre></div>
 <p><strong>Trust Model</strong>:
 - User space is <strong>untrusted</strong>
@@ -2095,19 +2093,19 @@
 </ol>
 <h2 id="data-flow">Data Flow<a class="headerlink" href="#data-flow" title="Permanent link">&para;</a></h2>
 <h3 id="request-processing">Request Processing<a class="headerlink" href="#request-processing" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>┌─────────────┐    JSON     ┌─────────────┐    Validation    ┌─────────────┐
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>│zfs-helperctl│────────────▶│zfs-helper.py│─────────────────▶│Policy Engine│
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>└─────────────┘             └─────────────┘                  └─────────────┘
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                                    │                               │
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                            ┌───────▼──────┐               ┌───────▼──────┐
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                            │   ZFS CMD    │               │    ALLOW/    │
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                            │  Execution   │◀──────────────│     DENY     │
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                            └───────┬──────┘               └──────────────┘
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                                    │
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>                            ┌───────▼──────┐
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>                            │   Response   │
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>                            │  &amp; Logging   │
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>                            └──────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌─────────────┐    JSON     ┌─────────────┐    Validation    ┌─────────────┐
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│zfs-helperctl│────────────▶│zfs-helper.py│─────────────────▶│Policy Engine│
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>└─────────────┘             └─────────────┘                  └─────────────┘
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>                                    │                               │
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>                            ┌───────▼──────┐               ┌───────▼──────┐
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>                            │   ZFS CMD    │               │    ALLOW/    │
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>                            │  Execution   │◀──────────────│     DENY     │
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>                            └───────┬──────┘               └──────────────┘
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>                                    │
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>                            ┌───────▼──────┐
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>                            │   Response   │
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>                            │  &amp; Logging   │
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>                            └──────────────┘
 </code></pre></div>
 <h3 id="example-request-flow">Example Request Flow<a class="headerlink" href="#example-request-flow" title="Permanent link">&para;</a></h3>
 <ol>
@@ -2135,18 +2133,18 @@
 </ul>
 <h3 id="logging-strategy">Logging Strategy<a class="headerlink" href="#logging-strategy" title="Permanent link">&para;</a></h3>
 <p>All errors are logged with structured JSON containing:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-10-24T12:00:00Z&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">&quot;caller_uid&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">&quot;caller_pid&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">&quot;service_unit&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;backup@pre-upgrade.service&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;snapshot&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tank/home/alice@pre-upgrade&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="nt">&quot;decision&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DENY&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dataset not in snapshot.list&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">  </span><span class="nt">&quot;policy_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/etc/zfs-helper/policy.d/alice/snapshot.list&quot;</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-10-24T12:00:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;caller_uid&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">&quot;caller_pid&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">&quot;service_unit&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;backup@pre-upgrade.service&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;snapshot&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tank/home/alice@pre-upgrade&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="nt">&quot;decision&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DENY&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dataset not in snapshot.list&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">&quot;policy_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/etc/zfs-helper/policy.d/alice/snapshot.list&quot;</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">}</span>
 </code></pre></div></p>
 <h2 id="performance-considerations">Performance Considerations<a class="headerlink" href="#performance-considerations" title="Permanent link">&para;</a></h2>
 <h3 id="socket-activation">Socket Activation<a class="headerlink" href="#socket-activation" title="Permanent link">&para;</a></h3>
@@ -2310,6 +2308,8 @@
     
     
       <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js"></script>
       
     
   </body>

@@ -8,6 +8,7 @@
     "Quadlets",
     "setprop",
     "sharenfs",
-    "zfshelper"
+    "zfshelper",
+    "zfsutils"
   ]
 }
