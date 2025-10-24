@@ -1,0 +1,72 @@
+.TH SYS-INFO 1 "October 2025" "sys-info 3.2.1" "User Commands"
+.SH NAME
+sys-info \- advanced system information utility
+.SH SYNOPSIS
+.B sys-info
+[\fIOPTION\fR]...
+.SH DESCRIPTION
+.B sys-info
+is a fast, efficient system information tool that provides detailed hardware and software information about your system.
+
+The utility displays comprehensive information including:
+.IP \(bu 2
+Operating system and kernel details
+.IP \(bu 2
+Memory usage and availability
+.IP \(bu 2
+CPU information and load averages
+.IP \(bu 2
+Disk usage statistics
+.IP \(bu 2
+Network interface information
+.IP \(bu 2
+System uptime and performance metrics
+
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Display help message and exit.
+.TP
+.BR \-v ", " \-\-version
+Display version information and exit.
+.TP
+.BR \-q ", " \-\-quiet
+Display minimal output with essential information only.
+
+.SH EXAMPLES
+.TP
+.B sys-info
+Display full system information with detailed output.
+.TP
+.B sys-info -q
+Display brief system summary.
+.TP
+.B sys-info --version
+Show version information.
+
+.SH EXIT STATUS
+.B sys-info
+exits with status 0 on success, and >0 if an error occurs.
+
+.SH FILES
+.TP
+.I /proc/cpuinfo
+CPU information
+.TP
+.I /proc/meminfo
+Memory information
+
+.SH AUTHOR
+Written for GH-Repos demonstration.
+
+.SH REPORTING BUGS
+Report bugs to the GH-Repos project repository.
+
+.SH COPYRIGHT
+This is free software; see the source for copying conditions.
+
+.SH SEE ALSO
+.BR uname (1),
+.BR free (1),
+.BR df (1),
+.BR uptime (1)

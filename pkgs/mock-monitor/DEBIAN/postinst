@@ -1,0 +1,20 @@
+#!/bin/bash
+# Post-installation script for mock-monitor
+
+set -e
+
+# Create log directory with proper permissions
+mkdir -p /var/log/mock-monitor
+chown root:adm /var/log/mock-monitor
+chmod 755 /var/log/mock-monitor
+
+# Reload systemd daemon to recognize new service
+systemctl daemon-reload
+
+# Enable the service (but don't start it automatically)
+systemctl enable mock-monitor.service
+
+echo "Mock Monitor service installed successfully!"
+echo "Start with: sudo systemctl start mock-monitor"
+echo "Check status: sudo systemctl status mock-monitor"
+echo "View logs: sudo journalctl -u mock-monitor -f"

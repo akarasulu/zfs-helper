@@ -1,0 +1,27 @@
+#!/bin/bash
+# Post-installation script for dev-tools
+
+set -e
+
+echo "Setting up dev-tools..."
+
+# Create user directories if they don't exist
+for user_home in /home/*; do
+    if [ -d "$user_home" ] && [ "$(basename "$user_home")" != "lost+found" ]; then
+        user=$(basename "$user_home")
+        if id "$user" &>/dev/null; then
+            # Create dev-tools config directory for user
+            user_config_dir="$user_home/.config/dev-tools"
+            if [ ! -d "$user_config_dir" ]; then
+                sudo -u "$user" mkdir -p "$user_config_dir"
+                sudo -u "$user" cp /usr/share/dev-tools/user-config-template.conf "$user_config_dir/config.conf"
+                echo "Created config directory for user: $user"
+            fi
+        fi
+    fi
+done
+
+echo "Dev-tools installed successfully!"
+echo "Run 'dev-init' to initialize a new project"
+echo "Run 'git-helper --help' for git utilities"
+echo "Configuration: /etc/dev-tools/config.conf"

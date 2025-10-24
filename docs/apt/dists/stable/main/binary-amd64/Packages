@@ -1,0 +1,85 @@
+Package: dev-tools
+Version: 1.5.2
+Section: devel
+Priority: optional
+Architecture: all
+Depends: bash (>= 4.0), git, curl
+Suggests: vim, tmux, docker.io
+Maintainer: GH-Repos Demo <demo@gh-repos.example>
+Description: Collection of development utility scripts
+ A comprehensive set of command-line tools for developers
+ including project scaffolding, git helpers, and build utilities.
+ .
+ This package demonstrates:
+ - Configuration file management with conffiles
+ - Dependencies and suggestions
+ - Shared data files installation
+ - Multiple utility scripts in one package
+Filename: pool/dev-tools_1.5.2_all.deb
+Size: 4304
+MD5sum: b74efcbb909194d5930ef91e19419be1
+SHA1: 136cd03b2a41188319046e3800f0e5436038196d
+SHA256: 7c5d4160f1b43ed51a84bb8985d1cfd8aba41a8c845baf44450b5405cf3683aa
+
+Package: hello-world
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: GH-Repos Demo <demo@gh-repos.example>
+Description: Simple hello world utility
+ A basic command-line utility that demonstrates
+ a minimal Debian package structure.
+ .
+ This package contains a simple script that prints
+ a greeting message to the terminal.
+Filename: pool/hello-world_1.0.0_all.deb
+Size: 992
+MD5sum: e3be93db9197fc4131cb120b5d05f0ca
+SHA1: 751d63cc683789729efcb1a3532c6f9280ed1696
+SHA256: bb578b873b326267e78faf4c649ba17664a2914b2a5045fd822c61f97d97a244
+
+Package: mock-monitor
+Version: 2.1.3
+Section: admin
+Priority: optional
+Architecture: all
+Depends: systemd
+Maintainer: GH-Repos Demo <demo@gh-repos.example>
+Description: Mock system monitoring service
+ A demonstration systemd service that simulates
+ system monitoring functionality.
+ .
+ This package shows how to create packages that:
+ - Install systemd service files
+ - Handle service lifecycle in maintainer scripts
+ - Create log directories and manage permissions
+ - Integrate with system service management
+Filename: pool/mock-monitor_2.1.3_all.deb
+Size: 2400
+MD5sum: 210936717c443cdbc2a6b2c22e001b2a
+SHA1: fa6712a313cdbc1d7c4ac47f577c68fed6345e02
+SHA256: f4454673962f47e671be4d600b29deb517609216903800e59097fb57ec17c0b3
+
+Package: sys-info
+Version: 3.2.1
+Section: admin
+Priority: optional
+Architecture: amd64
+Depends: libc6 (>= 2.17)
+Maintainer: GH-Repos Demo <demo@gh-repos.example>
+Description: Advanced system information utility
+ A fast, efficient system information tool written in C
+ that provides detailed hardware and software information.
+ .
+ This package demonstrates:
+ - Architecture-specific binaries (amd64)
+ - Compiled C programs with dependencies
+ - Manual pages installation
+ - Build process with compilation
+Filename: pool/sys-info_3.2.1_amd64.deb
+Size: 7816
+MD5sum: c08dd2bf24cdf0fbc293e9b69ee84f4e
+SHA1: 452557e67cad75217f1b560431bb36e452f236a1
+SHA256: 39e4498ee493c45350951c70cf49437b303d1e8a6190abea720664314c5fdae1
+

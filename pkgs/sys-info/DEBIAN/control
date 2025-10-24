@@ -1,0 +1,16 @@
+Package: sys-info
+Version: 3.2.1
+Section: admin
+Priority: optional
+Architecture: amd64
+Depends: libc6 (>= 2.17)
+Maintainer: GH-Repos Demo <demo@gh-repos.example>
+Description: Advanced system information utility
+ A fast, efficient system information tool written in C
+ that provides detailed hardware and software information.
+ .
+ This package demonstrates:
+ - Architecture-specific binaries (amd64)
+ - Compiled C programs with dependencies
+ - Manual pages installation
+ - Build process with compilation

@@ -1,0 +1,39 @@
+Origin: gh-repos
+Label: GH-Repos APT Repository
+Suite: stable
+Version: 1.0
+Codename: stable
+Date: Thu, 23 Oct 2025 21:41:28 +0000
+Architectures: amd64 arm64 all
+Components: main
+Description: APT repository for GH-Repos hosted on GitHub Pages
+MD5Sum:
+ 1e42826a6544365457d05daed5cf9393    1320 main/binary-amd64/Packages.gz
+ 46ae4a17bbc0d7cb8de7f6b838a20e2f    1359 main/binary-amd64/Packages.bz2
+ 4597085b6023f997ca035979099adb04    2788 main/binary-amd64/Packages
+ 2aee16b941e94e7d8874fe51cce7994e    1041 main/binary-all/Packages.gz
+ 2822c2ec27ab9fdbf1a5d3bcbd9e1661    1089 main/binary-all/Packages.bz2
+ 098bc142771ed9b0b7ab78d3a8bca2c5    2072 main/binary-all/Packages
+ 606c1c84b2d9768bfabdea254e8f3c7d      29 main/binary-arm64/Packages.gz
+ 4059d198768f9f8dc9372dc1c54bc3c3      14 main/binary-arm64/Packages.bz2
+ d41d8cd98f00b204e9800998ecf8427e       0 main/binary-arm64/Packages
+SHA1:
+ fc2479f26144d99402bfd87cc528c09b9801e0ff    1320 main/binary-amd64/Packages.gz
+ 3f7e30cd5468b96e1d886c962f23212aeb36fc5f    1359 main/binary-amd64/Packages.bz2
+ 92bbe3a8da6d22448728896de2beedd09eb4a730    2788 main/binary-amd64/Packages
+ da32f5643d4569147a763d8b97deb530c883cb38    1041 main/binary-all/Packages.gz
+ f1d6d521c129fdf457b21789072defdd2f8d49e3    1089 main/binary-all/Packages.bz2
+ 597f6520d0d45d9f4d9aecfed3f23614c1508ea7    2072 main/binary-all/Packages
+ aa0bdfbecc22d6769df1b822c1babb963c592b94      29 main/binary-arm64/Packages.gz
+ 64a543afbb5f4bf728636bdcbbe7a2ed0804adc2      14 main/binary-arm64/Packages.bz2
+ da39a3ee5e6b4b0d3255bfef95601890afd80709       0 main/binary-arm64/Packages
+SHA256:
+ dfff50bcf3a31e6f4aebec65451f94661135954eda38b936808deed3351d7bac    1320 main/binary-amd64/Packages.gz
+ 5e85f107536c8bfe43ede62f79231a9194c573172244c601b54d211b7e6e5aa3    1359 main/binary-amd64/Packages.bz2
+ f9a3115f44a6695b1cf325b5fbd236efc1cb59a86c2010eb49fe30e25c255fec    2788 main/binary-amd64/Packages
+ 32954f494b344449a16107c140059f477e91466ee065ceb5f491a93768368f81    1041 main/binary-all/Packages.gz
+ 606273ca23a746c4954ea7fbb6ba1eb7b5fa204bbfb4d0cc3827bd030a2fa7a2    1089 main/binary-all/Packages.bz2
+ 7f2d9e5f0579dc9b0d0f298c6506121ab6355db08aa0d67a2fd816b713ab3ed3    2072 main/binary-all/Packages
+ 6a240ebc8fd97b90f443ca5f58a7df1695d51eb1e34c8ad7e1bcddeb2b115753      29 main/binary-arm64/Packages.gz
+ d3dda84eb03b9738d118eb2be78e246106900493c0ae07819ad60815134a8058      14 main/binary-arm64/Packages.bz2
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855       0 main/binary-arm64/Packages

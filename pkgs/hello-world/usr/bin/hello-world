@@ -1,0 +1,5 @@
+#!/bin/bash
+# Simple hello world script
+echo "Hello from GH-Repos! 🎉"
+echo "This package was built and distributed through GitHub Pages."
+echo "Package: hello-world v1.0.0"

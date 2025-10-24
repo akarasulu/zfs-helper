@@ -1,0 +1,39 @@
+#!/bin/bash
+# Mock monitoring daemon
+# Simulates system monitoring by logging system information
+
+LOGFILE="/var/log/mock-monitor/monitor.log"
+PIDFILE="/var/run/mock-monitor.pid"
+
+log_message() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [mock-monitor] $1" >> "$LOGFILE"
+}
+
+cleanup() {
+    log_message "Service stopping gracefully"
+    rm -f "$PIDFILE"
+    exit 0
+}
+
+# Set up signal handlers
+trap cleanup SIGTERM SIGINT
+
+# Create PID file
+echo $$ > "$PIDFILE"
+
+log_message "Mock Monitor service starting..."
+log_message "PID: $$"
+log_message "Log file: $LOGFILE"
+
+# Main monitoring loop
+while true; do
+    # Log system information
+    load_avg=$(uptime | awk -F'load average:' '{print $2}' | sed 's/^ *//')
+    disk_usage=$(df -h / | awk 'NR==2 {print $5}')
+    memory_info=$(free -h | awk 'NR==2{printf "Used: %s/%s (%.2f%%)", $3,$2,$3*100/$2}')
+    
+    log_message "System Status - Load: $load_avg, Disk: $disk_usage, Memory: $memory_info"
+    
+    # Sleep for 30 seconds
+    sleep 30
+done

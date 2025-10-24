@@ -1,0 +1,121 @@
+#!/bin/bash
+# git-helper - Git utility scripts
+
+usage() {
+    echo "Usage: git-helper <command> [options]"
+    echo ""
+    echo "Git utility commands:"
+    echo "  cleanup       Clean up merged branches"
+    echo "  sync          Sync with upstream repository"
+    echo "  release       Create a release branch"
+    echo "  stats         Show repository statistics"
+    echo "  contrib       Show contributor statistics"
+    echo ""
+    echo "Examples:"
+    echo "  git-helper cleanup"
+    echo "  git-helper sync origin main"
+    echo "  git-helper release v1.2.0"
+}
+
+cleanup_branches() {
+    echo "🧹 Cleaning up merged branches..."
+    
+    # Update main branch
+    git checkout main 2>/dev/null || git checkout master
+    git pull
+    
+    # Delete merged branches
+    merged_branches=$(git branch --merged | grep -v -E "(main|master|\*)" | tr -d ' ')
+    
+    if [[ -n "$merged_branches" ]]; then
+        echo "Deleting merged branches:"
+        echo "$merged_branches"
+        echo "$merged_branches" | xargs git branch -d
+    else
+        echo "No merged branches to delete"
+    fi
+    
+    echo "✅ Cleanup complete!"
+}
+
+sync_upstream() {
+    local remote="${1:-origin}"
+    local branch="${2:-main}"
+    
+    echo "🔄 Syncing with $remote/$branch..."
+    
+    git fetch "$remote"
+    git checkout "$branch"
+    git merge "$remote/$branch"
+    
+    echo "✅ Sync complete!"
+}
+
+create_release() {
+    local version="$1"
+    
+    if [[ -z "$version" ]]; then
+        echo "Error: Version is required"
+        echo "Usage: git-helper release <version>"
+        exit 1
+    fi
+    
+    echo "🚀 Creating release branch for $version..."
+    
+    git checkout main
+    git pull
+    git checkout -b "release/$version"
+    
+    echo "✅ Release branch created: release/$version"
+    echo "💡 Don't forget to:"
+    echo "   1. Update version numbers"
+    echo "   2. Update CHANGELOG"
+    echo "   3. Create pull request when ready"
+}
+
+show_stats() {
+    echo "📊 Repository Statistics"
+    echo "======================="
+    echo "Total commits: $(git rev-list --all --count)"
+    echo "Total branches: $(git branch -a | wc -l)"
+    echo "Total tags: $(git tag | wc -l)"
+    echo "Repository size: $(du -sh .git | cut -f1)"
+    echo ""
+    echo "Recent activity (last 30 days):"
+    git log --since="30 days ago" --oneline | wc -l | xargs echo "Commits:"
+}
+
+show_contributors() {
+    echo "👥 Contributor Statistics"
+    echo "========================"
+    git shortlog -sn --all
+}
+
+command="$1"
+shift
+
+case "$command" in
+    cleanup)
+        cleanup_branches "$@"
+        ;;
+    sync)
+        sync_upstream "$@"
+        ;;
+    release)
+        create_release "$@"
+        ;;
+    stats)
+        show_stats
+        ;;
+    contrib)
+        show_contributors
+        ;;
+    -h|--help|help)
+        usage
+        ;;
+    *)
+        echo "Error: Unknown command '$command'"
+        usage
+        exit 1
+        ;;
+esac
