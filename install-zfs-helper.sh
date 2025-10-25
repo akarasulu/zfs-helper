@@ -51,12 +51,14 @@ if ! command -v /usr/sbin/zfs >/dev/null 2>&1; then
   echo "WARNING: /usr/sbin/zfs not found. Install OpenZFS to use the helper." >&2
 fi
 
-DAEMON_SRC="$(dirname "$0")/sbin/zfs-helper.py"
+DAEMON_SRC="$(dirname "$0")/pkgs/zfs-helper/usr/sbin/zfs-helper.py"
+DELEGATION_SRC="$(dirname "$0")/pkgs/zfs-helper/usr/sbin/apply-delegation.py"
 CLI_SRC="$(dirname "$0")/pkgs/zfs-helper-client/usr/bin/zfs-helperctl"
-SOCKET_UNIT_SRC="$(dirname "$0")/systemd/zfs-helper.socket"
-SERVICE_UNIT_SRC="$(dirname "$0")/systemd/zfs-helper.service"
+SOCKET_UNIT_SRC="$(dirname "$0")/pkgs/zfs-helper/lib/systemd/system/zfs-helper.socket"
+SERVICE_UNIT_SRC="$(dirname "$0")/pkgs/zfs-helper/lib/systemd/system/zfs-helper.service"
 
 DAEMON=/usr/local/sbin/zfs-helper.py
+DELEGATION=/usr/local/sbin/apply-delegation.py
 CLI=/usr/local/bin/zfs-helperctl
 UNIT_DIR=/etc/systemd/system
 SOCKET_UNIT=${UNIT_DIR}/zfs-helper.socket
@@ -70,6 +72,7 @@ install -d -m 0755 -o root -g root "${POLICY_ROOT}"
 install -d -m 0755 -o root -g root "${USER_DIR}"
 
 install -m 0755 -o root -g root "${DAEMON_SRC}" "${DAEMON}"
+install -m 0755 -o root -g root "${DELEGATION_SRC}" "${DELEGATION}"
 install -m 0755 -o root -g root "${CLI_SRC}" "${CLI}"
 install -m 0644 -o root -g root "${SOCKET_UNIT_SRC}" "${SOCKET_UNIT}"
 install -m 0644 -o root -g root "${SERVICE_UNIT_SRC}" "${SERVICE_UNIT}"

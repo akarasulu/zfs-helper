@@ -28,12 +28,11 @@ The privileged gateway service securely overcomes delegation limitations resulti
 ## Layout
 
 - `install-zfs-helper.sh` - installer (idempotent)
-- `sbin/zfs-helper.py` - daemon (privileged service driver)
-- `sbin/apply-delegation.py` - synchronizes (as much as is possible) zfs-helper policies with delegated ZFS permissions
+- `pkgs/zfs-helper/usr/sbin/zfs-helper.py` - daemon (privileged service driver)
+- `pkgs/zfs-helper/usr/sbin/apply-delegation.py` - synchronizes (as much as is possible) zfs-helper policies with delegated ZFS permissions
 - `pkgs/zfs-helper-client/usr/bin/zfs-helperctl` - client CLI (used by user-scoped services)
-- `systemd/zfs-helper.socket` & `systemd/zfs-helper.service` - systemd units
-- `examples/user/backup@.service` - demonstrates user-scoped service access to zfs-helper
-- `policy/` - example policy files to seed installations
+- `pkgs/zfs-helper/lib/systemd/system/` - systemd units (socket & service)
+- `examples/user/backup@.service` - example user systemd service template
 
 ## Quick start
 
