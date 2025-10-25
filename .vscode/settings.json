@@ -20,6 +20,7 @@
     "numvcpus",
     "oneshot",
     "PEERCRED",
+    "pipefail",
     "pkgs",
     "PKGS",
     "postinst",
