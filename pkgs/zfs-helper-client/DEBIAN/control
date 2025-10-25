@@ -3,8 +3,7 @@ Version: 1.0.0
 Section: admin
 Priority: optional
 Architecture: all
-Depends: bash (>= 4.0), jq, socat
-Recommends: zfs-helper
+Depends: bash (>= 4.0), jq, socat, zfs-helper
 Maintainer: Alex Karasulu <akarasulu@apache.org>
 Description: Client tools for ZFS delegation helper
  Client-side utilities for the zfs-helper system that allows unprivileged
